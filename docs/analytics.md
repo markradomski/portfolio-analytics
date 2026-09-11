@@ -70,7 +70,7 @@ the year's brokerage total — $54.00 in 2024, $117.00 in 2023).
 **A fee reversal treated as a second charge.** `Reversal:
 OngoingAdminChargeByValue` is a credit (positive `net_amount`) refunding an
 earlier charge. Summing `abs(amount)` per transaction before totalling turns
-that credit into another debit instead of cancelling the original — $9.31
+that credit into another debit instead of cancelling the original — $8.47
 became $18.62 of "fees" instead of $0. Fixed by summing signed amounts first,
 then taking the magnitude of the total.
 

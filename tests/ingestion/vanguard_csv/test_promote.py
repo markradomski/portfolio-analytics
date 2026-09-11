@@ -164,7 +164,7 @@ def test_fee_reversal_stays_positive_and_post_window_fee_is_retained():
     plan = build_promotion_plan(only, rep)
     assert plan.ready
     fee = plan.new_transactions[0]
-    assert fee.type is TxnType.FEE and fee.net_amount == Decimal("9.31")
+    assert fee.type is TxnType.FEE and fee.net_amount == Decimal("8.47")
 
 
 # --- determinism / privacy -----------------------------------------

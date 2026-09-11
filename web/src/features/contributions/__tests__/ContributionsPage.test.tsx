@@ -21,13 +21,13 @@ function pending() {
 }
 
 const summary: ContributionSummary = {
-  total_contributed: "107110.02", total_withdrawn: "-123590.12", net_contributed: "-16480.10",
-  investment_growth: "16606.98", income_received: "6224.88", current_value: "126.88", as_at: "2026-06-30",
+  total_contributed: "98765.43", total_withdrawn: "-123590.12", net_contributed: "-15112.87",
+  investment_growth: "15420.33", income_received: "6224.88", current_value: "118.42", as_at: "2026-06-30",
 };
 
 const historyRows: ContributionHistoryRow[] = [
   { period_end: "2025-06-30", contributions: "5000", withdrawals: "-2000", net_contributions: "3000",
-    cumulative_contributions: "107110.02", cumulative_withdrawals: "-123590.12", cumulative_net: "-16480.10" },
+    cumulative_contributions: "98765.43", cumulative_withdrawals: "-123590.12", cumulative_net: "-15112.87" },
 ];
 
 const coverage: DataCoverage = {
@@ -47,7 +47,7 @@ describe("ContributionsPage", () => {
   it("renders contribution totals and history rows from the API", () => {
     setupDefaults();
     render(<ContributionsPage />);
-    expect(screen.getAllByText("-$16,480.10").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("-$15,112.87").length).toBeGreaterThan(0);
     expect(screen.getByText("2025")).toBeInTheDocument();
   });
 
@@ -72,7 +72,7 @@ describe("ContributionsPage", () => {
     mockUseContributionsHistory.mockReturnValue(pending());
     mockUseDataCoverage.mockReturnValue(pending());
     render(<ContributionsPage />);
-    expect(screen.queryByText("-$16,480.10")).not.toBeInTheDocument();
+    expect(screen.queryByText("-$15,112.87")).not.toBeInTheDocument();
   });
 
   it("uses a single h1", () => {

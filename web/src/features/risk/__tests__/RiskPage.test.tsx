@@ -47,7 +47,7 @@ const drawdowns: DrawdownAnalytics = {
 };
 
 const highWaterMark: HighWaterMarkStatus = {
-  date: "2026-06-30", current_value: "126.88", high_water_mark: "40000",
+  date: "2026-06-30", current_value: "118.42", high_water_mark: "40000",
   distance_from_high: "-39873.12", distance_from_high_pct: "-0.997", days_since_high: 1200,
 };
 

@@ -74,9 +74,9 @@ CASH_ROWS = [
     # brokerage cash leg of the BHP buy
     "05-Feb-2025,Fees and Charges,Cash account,Australian Equity Transaction fee for BHP Billiton Limited Buy,BHP,,-9",
     # quarterly admin fee
-    "02-Oct-2021,Fees and Charges,Cash account,OngoingAdminChargeByValue,CASH,,-9.31",
+    "02-Oct-2021,Fees and Charges,Cash account,OngoingAdminChargeByValue,CASH,,-8.47",
     # explicit reversal of that admin fee, a few weeks later (+ sign, kept)
-    "25-Oct-2021,Fees and Charges,Cash account,Reversal: OngoingAdminChargeByValue,CASH,,9.31",
+    "25-Oct-2021,Fees and Charges,Cash account,Reversal: OngoingAdminChargeByValue,CASH,,8.47",
 ]
 
 CASH_CSV = CASH_HEADER + "\n" + "\n".join(CASH_ROWS) + "\n"

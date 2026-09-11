@@ -43,7 +43,7 @@ export const ManyHoldings: Story = {
 
 export const SingleHolding: Story = {
   args: {
-    holdings: [holding({ security_id: "1", code: "VAS", market_value: "126.88", allocation_pct: "1" })],
+    holdings: [holding({ security_id: "1", code: "VAS", market_value: "118.42", allocation_pct: "1" })],
     gains: [gain({ security_id: "1", code: "VAS", unrealised_gain: "0", unrealised_gain_pct: "0" })],
   },
 };

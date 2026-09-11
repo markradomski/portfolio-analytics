@@ -13,7 +13,7 @@ export const Default: Story = {
   args: {
     title: "Portfolio value",
     subtitle: "As at 30 Jun 2026",
-    children: <p style={{ margin: 0 }}>$126.88</p>,
+    children: <p style={{ margin: 0 }}>$118.42</p>,
   },
 };
 

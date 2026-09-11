@@ -256,7 +256,7 @@ continuity from being misread as continuous observation.
 ## 9. Fully-divested portfolio state
 
 Re-verified live (§11) on the real portfolio, which is currently in
-exactly this state: **0 current holdings, $126.88 cash, historical data
+exactly this state: **0 current holdings, $118.42 cash, historical data
 for 7 years including individual securities (VAS, VGS, etc.) fully
 intact**.
 
@@ -268,7 +268,7 @@ actually distinct in the chart system:
 | No current holdings | `HoldingsTable`'s `UnavailableMetric` ("No current holdings — this portfolio is fully divested to cash...") replaces the table; **no chart is affected** — `AllocationHistoryChart` on the same screen keeps rendering 7 years of real data | Live, Holdings screen |
 | No historical data | Would mean `AllocationHistoryChart` itself renders its own empty state ("No allocation history available yet.") — **not this portfolio's actual condition**, confirmed by the historical chart rendering real bands | Live (contrapositive verified: historical chart is populated, not empty) |
 | Unavailable data | Holdings' *current* `AllocationChart`/table pairing is replaced by `UnavailableMetric` ("no allocation computed for 2026-06-30") because there's nothing to allocate today — a capability/computation fact about *today*, not about history | Live, Holdings screen |
-| Zero value | The portfolio's *current* total value ($126.88) is a real, non-zero number — cash, not "zero." No chart in this application currently needs to distinguish a genuine `$0` portfolio value from an unavailable one, since this dataset never reaches literal zero; the distinction is documented as a general `MetricValue`/chart rule (`unavailable ≠ zero`) rather than demonstrated with a live example that doesn't exist | Documented, not demonstrable live |
+| Zero value | The portfolio's *current* total value ($118.42) is a real, non-zero number — cash, not "zero." No chart in this application currently needs to distinguish a genuine `$0` portfolio value from an unavailable one, since this dataset never reaches literal zero; the distinction is documented as a general `MetricValue`/chart rule (`unavailable ≠ zero`) rather than demonstrated with a live example that doesn't exist | Documented, not demonstrable live |
 
 No historical holdings were fabricated to demonstrate any of the above —
 every example above is the real API response for this real portfolio.

@@ -174,11 +174,11 @@ def test_negative_admin_fee_is_FEE_and_distinct_from_brokerage():
 
 def test_explicit_fee_reversal_keeps_positive_sign_and_is_classified():
     cash_csv = (fx.CASH_HEADER + "\n"
-                "25-Oct-2021,Fees and Charges,Cash account,Reversal: OngoingAdminChargeByValue,CASH,,9.31\n")
+                "25-Oct-2021,Fees and Charges,Cash account,Reversal: OngoingAdminChargeByValue,CASH,,8.47\n")
     cs, _ = _build(cash_csv=cash_csv)
     f = cs.cash[0]
     assert f.type is TxnType.FEE
-    assert f.signed_amount == Decimal("9.31")               # sign NOT forced negative
+    assert f.signed_amount == Decimal("8.47")               # sign NOT forced negative
     # Stage 4B: an explicit "Reversal: ..." row -- a fee refund, a
     # signed-positive FEE adjustment that nets its paired charge.
     assert f.classification_status is ClassificationStatus.CLASSIFIED

@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof MetricValue>;
 
 export const PortfolioValue: Story = {
-  args: { label: "Portfolio value", value: "$126.88", size: "large" },
+  args: { label: "Portfolio value", value: "$118.42", size: "large" },
 };
 
 export const PositiveReturn: Story = {

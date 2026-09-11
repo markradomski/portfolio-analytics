@@ -49,8 +49,18 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# FRONTEND_ORIGIN lets a deployment allow its one known frontend origin
+# (e.g. https://portfolio-analytics.vercel.app) without widening CORS to "*"
+# in production. Comma-separated if more than one is ever needed. Empty in
+# local development, where the regex below already covers every localhost
+# port Vite might pick.
+_deployed_origins = [
+    o.strip() for o in os.environ.get("FRONTEND_ORIGIN", "").split(",") if o.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=_deployed_origins,
     # Vite picks the first free port from 5173 upward, so a fixed origin
     # list breaks the moment something else is already listening on 5173 --
     # match any localhost port in development rather than hard-coding one.

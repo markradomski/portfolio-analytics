@@ -50,8 +50,8 @@ function failed() {
 }
 
 const overview: PortfolioOverview = {
-  as_at: "2026-06-30", current_value: "126.88", total_contributed: "107110.02",
-  total_withdrawn: "-123590.12", net_contributed: "-16480.10", investment_growth: "16606.98",
+  as_at: "2026-06-30", current_value: "118.42", total_contributed: "98765.43",
+  total_withdrawn: "-123590.12", net_contributed: "-15112.87", investment_growth: "15420.33",
   income_received: "6224.88",
   data_coverage: {
     valuation_start: "2020-09-30", valuation_end: "2026-06-30", valuation_observation_count: 24,
@@ -101,10 +101,10 @@ const reconciliation: AttributionReconciliationPair = {
 
 function dailyPoint(overrides: Partial<PortfolioDailyPoint>): PortfolioDailyPoint {
   return {
-    date: "2026-06-30", total_value: "126.88", securities_value: "0", cash: "126.88", cost_basis: "0",
+    date: "2026-06-30", total_value: "118.42", securities_value: "0", cash: "118.42", cost_basis: "0",
     invested_capital: "0", realised_gain: "0", unrealised_gain: null, dividends: "0", distributions: "0",
-    income: "0", fees: "0", cumulative_contributions: "107110.02", cumulative_withdrawals: "-123590.12",
-    high_water_mark: "126.88", drawdown_value: null, drawdown_pct: null, return_index: "168.44",
+    income: "0", fees: "0", cumulative_contributions: "98765.43", cumulative_withdrawals: "-123590.12",
+    high_water_mark: "118.42", drawdown_value: null, drawdown_pct: null, return_index: "153.21",
     index_as_at: "2026-06-30", return_high_water: null, return_drawdown_pct: null,
     valuation_status: "actual", valuation_source: "VANGUARD", price_as_at: "2026-06-30", source_count: 1,
     calculation_method: "actual", ...overrides,
@@ -115,7 +115,7 @@ const calendarRows: CalendarPerformanceRow[] = [
   { period: "2025", twrr: "0.105", xirr: "0.061", income: "50", contributions: "0", withdrawals: "0",
     closing_value: "40000", valuation_status: "actual" },
   { period: "2026", twrr: "0.17", xirr: "0.06", income: "10", contributions: "0", withdrawals: "-3600",
-    closing_value: "126.88", valuation_status: "actual" },
+    closing_value: "118.42", valuation_status: "actual" },
 ];
 
 const bestWorst: BestWorstPeriods = {
@@ -135,7 +135,7 @@ const drawdowns: DrawdownAnalytics = {
 };
 
 const dollarOverview: PerformanceOverview = {
-  period_start: "2025-06-30", period_end: "2026-06-30", opening_value: "9800", closing_value: "126.88",
+  period_start: "2025-06-30", period_end: "2026-06-30", opening_value: "9800", closing_value: "118.42",
   contributions: "0", withdrawals: "-3600", net_external_flow: "-3600", investment_gain: "348.64",
   income: "99.49", fees: "3.44", total_return: "0.199", capital_return: "0.16", income_return: "0.057",
   twrr: "0.151", xirr: "0.004", data_quality: "actual",
@@ -153,7 +153,7 @@ const growthSeries: PortfolioGrowthPoint[] = [
   growthPoint({ date: "2020-09-30", portfolio_value: "10000", net_contributions: "10000", investment_gain: "0" }),
   growthPoint({ date: "2023-06-30", portfolio_value: "45000", net_contributions: "40000", investment_gain: "5000" }),
   growthPoint({ date: "2025-06-30", portfolio_value: "9800", net_contributions: "9451.36", investment_gain: "348.64" }),
-  growthPoint({ date: "2026-06-30", portfolio_value: "126.88", net_contributions: "-16480.10", investment_gain: "16606.98" }),
+  growthPoint({ date: "2026-06-30", portfolio_value: "118.42", net_contributions: "-15112.87", investment_gain: "15420.33" }),
 ];
 
 const staticData = {

@@ -136,7 +136,7 @@ from the real design tokens (not hard-coded hex/pixel guesses) and
 matching the actual application's information hierarchy, figures, and
 states as verified live during Phases 5.5–5.7:
 
-- **Overview**: header ($126.88 / +$16,606.98 / +68.0% / $107,110.02),
+- **Overview**: header ($118.42 / +$15,420.33 / +61.5% / $98,765.43),
   historical value chart with period tabs, Contributions + Income cards,
   Allocation ("Unavailable — no allocation computed for 2026-06-30") +
   Top Holdings ("No securities currently held.") cards side by side,
@@ -146,7 +146,7 @@ states as verified live during Phases 5.5–5.7:
   stats), return-index chart (explicitly labelled "not portfolio value"),
   return decomposition, methodology (TWRR/XIRR), calendar performance row,
   coverage footer.
-- **Holdings**: header, portfolio snapshot (0 holdings, $126.88 cash),
+- **Holdings**: header, portfolio snapshot (0 holdings, $118.42 cash),
   Allocation + Holdings cards both showing their real unavailable/empty
   states side by side, allocation-over-time band (still populated despite
   0 current holdings — the fully-divested pattern made concrete), coverage

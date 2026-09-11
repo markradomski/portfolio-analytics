@@ -145,7 +145,7 @@ def test_fee_reversal_is_detected_as_a_rebate_pair():
     rep = reconcile(cs, [], pdf_closing_cash=Decimal("0"))
     rebate = [r for r in rep.by_class("FEE") if r.status is ReconStatus.FEE_REBATE]
     assert len(rebate) == 1 and rebate[0].resolved
-    assert rebate[0].csv_amount == Decimal("9.31")
+    assert rebate[0].csv_amount == Decimal("8.47")
 
 
 def test_csv_only_fee_after_pdf_window_is_source_coverage_not_a_blocker():

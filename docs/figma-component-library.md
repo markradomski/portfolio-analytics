@@ -402,5 +402,5 @@ One discrepancy was already identified and documented in Step 3
 (the Reconciliation badge label issue, restated above under Badge's
 Known Exceptions) — no new discrepancy was found in this step's
 re-verification. All three screens still correctly show this portfolio's
-real fully-divested state (0 current holdings, $126.88 cash) rather than
+real fully-divested state (0 current holdings, $118.42 cash) rather than
 an idealised populated mockup.

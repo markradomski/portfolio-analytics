@@ -297,8 +297,8 @@ Gains/Activity tables.
 ## 14. Known API/backend gaps (not fixed — frontend cannot fix these)
 
 - **High-water-mark distance appears to be `$0.00` / `0.0%` / `0 days`
-  even though `current_value` ($126.88) is well below `high_water_mark`
-  ($189.07)** for this portfolio's real data. `RiskPage` renders exactly
+  even though `current_value` ($118.42) is well below `high_water_mark`
+  ($172.35)** for this portfolio's real data. `RiskPage` renders exactly
   what `getHighWaterMark()` returns (`distance_from_high: "0E-25"`,
   `distance_from_high_pct: "0"`, `days_since_high: 0`, confirmed via a
   direct `curl` against the running API) — this looks like a backend

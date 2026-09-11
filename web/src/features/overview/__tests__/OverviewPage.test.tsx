@@ -43,8 +43,8 @@ function failed() {
 }
 
 const overview: PortfolioOverview = {
-  as_at: "2026-06-30", current_value: "126.88", total_contributed: "107110.02",
-  total_withdrawn: "-123590.12", net_contributed: "-16480.10", investment_growth: "16606.98",
+  as_at: "2026-06-30", current_value: "118.42", total_contributed: "98765.43",
+  total_withdrawn: "-123590.12", net_contributed: "-15112.87", investment_growth: "15420.33",
   income_received: "6224.88",
   data_coverage: {
     valuation_start: "2020-09-30", valuation_end: "2026-06-30", valuation_observation_count: 24,
@@ -58,7 +58,7 @@ const baseline = {
   overview: ok(overview),
   capabilities: ok({}),
   periods: ok([{ label: "INCEPTION", as_at: "2026-06-30", start_date: "2020-09-30", end_date: "2026-06-30",
-    total_return: "0.68", capital_return: "0.6", income_return: "0.08", twrr: "0.68", xirr: "0.5",
+    total_return: "0.615", capital_return: "0.55", income_return: "0.065", twrr: "0.615", xirr: "0.5",
     status: "actual" as const, note: null }]),
   methodology: ok({ return_methodology: {}, twrr: { twrr_methodology: "SUBPERIOD_LINKED" as const,
     twrr_methodology_note: "", cash_flow_adjustment_method: "EXACT_DATED" as const,
@@ -77,10 +77,10 @@ const baseline = {
 
 function dailyPoint() {
   return {
-    date: "2026-06-30", total_value: "126.88", securities_value: "0", cash: "126.88", cost_basis: "0",
+    date: "2026-06-30", total_value: "118.42", securities_value: "0", cash: "118.42", cost_basis: "0",
     invested_capital: "0", realised_gain: "0", unrealised_gain: null, dividends: "0", distributions: "0",
-    income: "0", fees: "0", cumulative_contributions: "107110.02", cumulative_withdrawals: "-123590.12",
-    high_water_mark: "126.88", drawdown_value: null, drawdown_pct: null, return_index: null,
+    income: "0", fees: "0", cumulative_contributions: "98765.43", cumulative_withdrawals: "-123590.12",
+    high_water_mark: "118.42", drawdown_value: null, drawdown_pct: null, return_index: null,
     index_as_at: null, return_high_water: null, return_drawdown_pct: null, valuation_status: "actual" as const,
     valuation_source: "VANGUARD", price_as_at: "2026-06-30", source_count: 1, calculation_method: "actual",
   };
@@ -93,11 +93,11 @@ function metricStub(name: string) {
 }
 
 const growthPoints = [
-  { date: "2026-06-30", portfolio_value: "126.88", contributions: "0.00", withdrawals: "0.00",
-    net_contributions: "-16480.10", investment_gain: "16606.98", cash_flow_events: [] },
+  { date: "2026-06-30", portfolio_value: "118.42", contributions: "0.00", withdrawals: "0.00",
+    net_contributions: "-15112.87", investment_gain: "15420.33", cash_flow_events: [] },
 ];
 const growthSummary = {
-  current_value: "126.88", net_contributions: "-16480.10", investment_gain: "16606.98",
+  current_value: "118.42", net_contributions: "-15112.87", investment_gain: "15420.33",
   growth_pct: null, as_at: "2026-06-30",
 };
 
@@ -115,17 +115,17 @@ describe("OverviewPage", () => {
   it("renders the current portfolio value and valuation date from the API, never hard-coded", () => {
     mockUseOverviewData.mockReturnValue(baseline);
     renderPage();
-    expect(screen.getAllByText("$126.88").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("$118.42").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/30 June 2026/).length).toBeGreaterThan(0);
   });
 
   it("renders a positive gain with its sign and colour tone, and the total return percentage", () => {
     mockUseOverviewData.mockReturnValue(baseline);
     renderPage();
-    expect(screen.getAllByText("+$16,606.98").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("+$15,420.33").length).toBeGreaterThan(0);
     // The inception return now also appears as the growth section's own
     // "Rate of return" metric -- same authoritative figure, shown twice.
-    expect(screen.getAllByText("+68.0%").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("+61.5%").length).toBeGreaterThan(0);
   });
 
   it("renders a negative gain distinctly from a positive one", () => {
@@ -143,7 +143,7 @@ describe("OverviewPage", () => {
     const contributions = screen.getByRole("heading", { name: "Contributions" }).closest("section")!;
     expect(within(contributions).getByText("Total contributions")).toBeInTheDocument();
     expect(within(contributions).getByText("Total withdrawals")).toBeInTheDocument();
-    expect(within(contributions).getByText("$107,110.02")).toBeInTheDocument();
+    expect(within(contributions).getByText("$98,765.43")).toBeInTheDocument();
     expect(within(contributions).getByText("-$123,590.12")).toBeInTheDocument();
   });
 
@@ -207,7 +207,7 @@ describe("OverviewPage", () => {
     mockUsePortfolioGrowth.mockReturnValue(pending());
     mockUsePortfolioGrowthSummary.mockReturnValue(pending());
     render(<MemoryRouter><OverviewPage /></MemoryRouter>);
-    expect(screen.queryByText("$126.88")).not.toBeInTheDocument();
+    expect(screen.queryByText("$118.42")).not.toBeInTheDocument();
     expect(document.querySelector('[aria-hidden="true"]')).toBeTruthy();
   });
 

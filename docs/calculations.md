@@ -259,7 +259,11 @@ numbers.
 
 **Nothing is ever forced to match.** A discrepancy is output, not corrected.
 
-Current status: **201 of 201 checks pass**.
+This reconciliation was run against a real account during development, with
+every check passing (see the README's "Validation philosophy" for why that
+result isn't republished here); the synthetic demo dataset in this
+repository passes the same checks against its own reported figures — see
+`tests/tools/test_generate_demo_data.py`.
 
 ---
 

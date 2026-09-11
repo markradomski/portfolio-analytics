@@ -3,8 +3,9 @@
 > **Status: Stage 5 MVP release complete.** Reconciled CSV data is promoted
 > into the active accounting projection running the real application.
 > Stages 6–7 (full historical/analytics migration audit, import-run
-> orchestration) remain deferred. See `docs/source-reconciliation.md` for
-> the release result.
+> orchestration) remain deferred. The real-data reconciliation report this
+> stage produced lives only in the private development repository, since it
+> narrates figures from a real account.
 
 ## Stage 5 — privacy fix: Deposit descriptions could carry a bank name or initials
 
@@ -243,7 +244,7 @@ accounting engine, historical engine, analytics, API or frontend. Only the
 `src/ingestion` → `src/normalisation` → canonical-ledger boundary changes.
 
 PDF ingestion is **retained** as an independent reconciliation / fallback
-source (see `docs/source-reconciliation.md`).
+source.
 
 ## Supported Vanguard exports
 

@@ -35,6 +35,6 @@ def test_detects_a_leaked_identity_label(repo):
 
 def test_money_is_not_mistaken_for_an_identifier(repo):
     """A six-figure balance is not an account number."""
-    repo.conn.execute("UPDATE transactions SET net_amount = '107110.02'")
+    repo.conn.execute("UPDATE transactions SET net_amount = '98765.43'")
     repo.commit()
     assert privacy.scan(repo) == []

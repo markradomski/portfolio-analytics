@@ -76,9 +76,9 @@ describe("PortfolioGrowthSection: summary", () => {
 
   it("prefers plain 'Contributed' / 'Withdrawn' metrics when the authoritative lifetime totals are available", () => {
     setup();
-    renderSection({ contributed: "107110.02", withdrawn: "-123590.12" });
+    renderSection({ contributed: "98765.43", withdrawn: "-123590.12" });
     expect(screen.getByText("Contributed")).toBeInTheDocument();
-    expect(screen.getByText("$107,110.02")).toBeInTheDocument();
+    expect(screen.getByText("$98,765.43")).toBeInTheDocument();
     expect(screen.getByText("Withdrawn")).toBeInTheDocument();
     // Shown as a plain positive amount, not the signed-negative stored value.
     expect(screen.getByText("$123,590.12")).toBeInTheDocument();
@@ -94,9 +94,9 @@ describe("PortfolioGrowthSection: summary", () => {
 
   it("shows Rate of return as a separate metric when the authoritative inception return is available", () => {
     setup();
-    renderSection({ rateOfReturn: "0.68" });
+    renderSection({ rateOfReturn: "0.615" });
     expect(screen.getByText("Rate of return")).toBeInTheDocument();
-    expect(screen.getByText("+68.0%")).toBeInTheDocument();
+    expect(screen.getByText("+61.5%")).toBeInTheDocument();
     expect(screen.getByText(/time-weighted, since inception/)).toBeInTheDocument();
   });
 

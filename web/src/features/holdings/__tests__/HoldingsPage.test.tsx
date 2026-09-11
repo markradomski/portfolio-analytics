@@ -37,10 +37,10 @@ function pending() {
 
 function dailyPoint(holdings: HoldingRow[], overrides: Partial<PortfolioState> = {}): PortfolioState {
   return {
-    date: "2026-06-30", total_value: "126.88", securities_value: "0", cash: "126.88", cost_basis: "0",
+    date: "2026-06-30", total_value: "118.42", securities_value: "0", cash: "118.42", cost_basis: "0",
     invested_capital: "0", realised_gain: "0", unrealised_gain: "0", dividends: "0", distributions: "0",
-    income: "0", fees: "0", cumulative_contributions: "107110.02", cumulative_withdrawals: "-123590.12",
-    high_water_mark: "126.88", drawdown_value: null, drawdown_pct: null, return_index: "189.07",
+    income: "0", fees: "0", cumulative_contributions: "98765.43", cumulative_withdrawals: "-123590.12",
+    high_water_mark: "118.42", drawdown_value: null, drawdown_pct: null, return_index: "172.35",
     index_as_at: "2026-06-30", return_high_water: null, return_drawdown_pct: null, valuation_status: "actual",
     valuation_source: "VANGUARD", price_as_at: "2026-06-30", source_count: 1, calculation_method: "actual",
     holdings, ...overrides,
@@ -48,8 +48,8 @@ function dailyPoint(holdings: HoldingRow[], overrides: Partial<PortfolioState> =
 }
 
 const overview: PortfolioOverview = {
-  as_at: "2026-06-30", current_value: "126.88", total_contributed: "107110.02",
-  total_withdrawn: "-123590.12", net_contributed: "-16480.10", investment_growth: "16606.98",
+  as_at: "2026-06-30", current_value: "118.42", total_contributed: "98765.43",
+  total_withdrawn: "-123590.12", net_contributed: "-15112.87", investment_growth: "15420.33",
   income_received: "6224.88",
   data_coverage: {
     valuation_start: "2020-09-30", valuation_end: "2026-06-30", valuation_observation_count: 24,
@@ -118,7 +118,7 @@ describe("HoldingsPage: fully-divested portfolio", () => {
     renderAt("/holdings");
     const snapshot = screen.getByText("Portfolio snapshot").closest("section")!;
     expect(within(snapshot).getByText("Cash")).toBeInTheDocument();
-    expect(within(snapshot).getAllByText("$126.88").length).toBe(2); // Total value and Cash are both $126.88 for a fully-divested cash-only portfolio
+    expect(within(snapshot).getAllByText("$118.42").length).toBe(2); // Total value and Cash are both $118.42 for a fully-divested cash-only portfolio
   });
 });
 
@@ -176,7 +176,7 @@ describe("HoldingsPage: loading and accessibility", () => {
   it("shows a loading placeholder, not an empty snapshot, while pending", () => {
     mockUseHoldingsData.mockReturnValue({ ...fullyDivestedData, holdings: pending() });
     renderAt("/holdings");
-    expect(screen.queryByText("$126.88")).not.toBeInTheDocument();
+    expect(screen.queryByText("$118.42")).not.toBeInTheDocument();
   });
 
   it("uses a single h1", () => {
