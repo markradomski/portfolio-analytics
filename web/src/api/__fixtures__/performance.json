@@ -1,0 +1,18 @@
+{
+  "period_start": "2024-06-30",
+  "period_end": "2024-09-30",
+  "opening_value": null,
+  "closing_value": "1890.00000",
+  "contributions": "500.00",
+  "withdrawals": "-200.00",
+  "net_external_flow": "300.00",
+  "investment_gain": null,
+  "income": "20.00",
+  "fees": "30.00",
+  "total_return": null,
+  "capital_return": null,
+  "income_return": null,
+  "twrr": null,
+  "xirr": null,
+  "data_quality": "calculated"
+}

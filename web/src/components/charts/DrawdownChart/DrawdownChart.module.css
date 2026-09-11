@@ -1,0 +1,2 @@
+.date { font: var(--text-body-strong); color: var(--color-surface); margin-bottom: 2px; }
+.value { font: var(--text-figure); color: var(--color-surface); }

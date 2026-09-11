@@ -1,0 +1,4 @@
+.page { display: flex; flex-direction: column; gap: var(--space-6); max-width: 72rem; }
+.header { display: flex; flex-direction: column; gap: var(--space-2); }
+.description { font: var(--text-body); color: var(--color-text-muted); margin: 0; max-width: 42rem; }
+.footer { border-top: 1px solid var(--color-border); padding-top: var(--space-4); }

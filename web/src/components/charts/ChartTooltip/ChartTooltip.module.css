@@ -1,0 +1,16 @@
+.tooltip {
+  position: absolute;
+  z-index: 10;
+  background: var(--color-text);
+  color: var(--color-surface);
+  border-radius: var(--radius-small);
+  padding: var(--space-3);
+  font: var(--text-meta);
+  box-shadow: var(--shadow-medium);
+  pointer-events: none;
+  min-width: 140px;
+}
+.date { font: var(--text-body-strong); color: var(--color-surface); margin-bottom: var(--space-1); }
+.value { font: var(--text-figure); color: var(--color-surface); }
+.row { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: 2px; }
+.faint { opacity: 0.75; }

@@ -1,0 +1,7 @@
+.figure { margin: 0; }
+.title { font: var(--text-h3); color: var(--color-text); margin-bottom: var(--space-3); }
+.canvas { position: relative; width: 100%; }
+.srOnly {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}

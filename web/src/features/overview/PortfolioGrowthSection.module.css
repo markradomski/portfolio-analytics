@@ -1,0 +1,4 @@
+.wrap { display: flex; flex-direction: column; gap: var(--space-4); }
+.summaryRow { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+.summaryRow > * { min-width: 0; flex: 1 1 160px; overflow-wrap: break-word; }
+.rorNote { font: var(--text-meta); color: var(--color-text-faint); }

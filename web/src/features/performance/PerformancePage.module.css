@@ -1,0 +1,117 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 72rem;
+}
+
+.header { display: flex; flex-direction: column; gap: var(--space-2); }
+.description {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 42rem;
+}
+.backLink {
+  font: var(--text-meta);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.backLink:hover, .backLink:focus-visible { text-decoration: underline; }
+
+.summaryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+/* A long unavailable-reason sentence (e.g. "No valuation on the exact
+   opening date of this window") must wrap within its own column rather
+   than forcing the whole row wider than the viewport -- flex items default
+   to min-width:auto, which lets long unbroken text stretch its column
+   instead of wrapping. */
+.summaryRow > * {
+  min-width: 0;
+  flex: 1 1 140px;
+  overflow-wrap: break-word;
+}
+.periodPhrase {
+  font: var(--text-meta);
+  color: var(--color-text-faint);
+  margin: var(--space-3) 0 0;
+}
+.flowNote {
+  font: var(--text-meta);
+  color: var(--color-text-muted);
+  margin: var(--space-1) 0 0;
+  max-width: 46rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.decompositionList { margin: 0; }
+.decompositionRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+  font: var(--text-body);
+}
+.decompositionRow dt { color: var(--color-text-muted); }
+.decompositionRow dd { margin: 0; font: var(--text-figure); font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.negativeFigure { color: var(--color-negative); }
+
+.reconciliation { margin-top: var(--space-4); }
+.reconciliationTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  padding: 0;
+  font: var(--text-body-strong);
+  color: var(--color-text);
+  cursor: pointer;
+}
+.reconciliationDetail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  background: var(--color-background);
+  border-radius: var(--radius-small);
+}
+.reconciliationDetail dt { font: var(--text-meta); color: var(--color-text-muted); }
+.reconciliationDetail dd { margin: 2px 0 0; font: var(--text-figure); font-size: 0.9375rem; }
+
+.methodologyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+.methodologyExplainer {
+  grid-column: 1 / -1;
+  font: var(--text-body);
+  color: var(--color-text-muted);
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+.methodologyExplainer p { margin: 0; }
+
+.secondaryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+@media (max-width: 860px) {
+  .grid, .methodologyGrid, .reconciliationDetail {
+    grid-template-columns: 1fr;
+  }
+}

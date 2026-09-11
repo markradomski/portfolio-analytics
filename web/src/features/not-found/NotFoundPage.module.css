@@ -1,0 +1,5 @@
+.page { display: flex; flex-direction: column; gap: var(--space-3); max-width: 40rem; }
+.description { font: var(--text-body); color: var(--color-text-muted); margin: 0; }
+.path { font: var(--text-figure); font-size: 0.9375rem; background: var(--color-background); padding: 2px 6px; border-radius: var(--radius-small); }
+.link { font: var(--text-body-strong); color: var(--color-accent); text-decoration: none; }
+.link:hover, .link:focus-visible { text-decoration: underline; }

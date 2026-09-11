@@ -1,0 +1,7 @@
+.chartWrap { margin-top: var(--space-4); }
+.empty {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+  padding: var(--space-6) 0;
+  text-align: center;
+}

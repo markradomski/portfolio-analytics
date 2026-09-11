@@ -1,0 +1,29 @@
+# This is a public release copy: there is no private data pipeline here,
+# but these rules stay as a hard backstop against anyone ever pointing the
+# ingestion pipeline at a real export from this checkout.
+statements/
+data/
+*.pdf
+venv/
+__pycache__/
+.DS_Store
+.pytest_cache/
+
+# A blanket `*.json` rule used to sit here to be doubly sure no parsed
+# statement data leaked in from outside data/ or statements/ -- but it also
+# silently gitignored web/package.json, web/package-lock.json, every
+# web/tsconfig*.json, web/.oxlintrc.json, and the synthetic (non-PII)
+# contract-test fixtures under web/src/api/__fixtures__/*.json. data/ and
+# statements/ above already cover the real concern; only the one
+# genuinely-regeneratable build artifact needs its own line now.
+web/openapi.json
+
+# Frontend build/tooling artifacts.
+web/node_modules/
+web/dist/
+web/coverage/
+web/storybook-static/
+
+# demo-data/portfolio.demo.db IS committed here deliberately -- it is
+# entirely synthetic (see tools/generate_demo_data.py) and is what lets
+# this repo run out of the box with no private Vanguard export at all.

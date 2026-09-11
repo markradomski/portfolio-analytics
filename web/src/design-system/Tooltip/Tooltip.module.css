@@ -1,0 +1,13 @@
+.trigger { display: inline-flex; }
+.panel {
+  position: fixed;
+  z-index: 50;
+  background: var(--color-text);
+  color: var(--color-surface);
+  font: var(--text-meta);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-small);
+  box-shadow: var(--shadow-medium);
+  max-width: 260px;
+  pointer-events: none;
+}

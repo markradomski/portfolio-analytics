@@ -1,0 +1,45 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: var(--text-meta);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-small);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Semantic tone -- gain/loss/status, distinct from data-quality tones below.
+   Never colour alone: each tone pairs with distinct text and (for badges
+   that stand alone) a symbol, per sec 32's non-colour-only requirement. */
+.positive { background: var(--color-positive-bg); color: var(--color-positive); }
+.positive .dot { background: var(--color-positive); }
+.negative { background: var(--color-negative-bg); color: var(--color-negative); }
+.negative .dot { background: var(--color-negative); }
+.warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.warning .dot { background: var(--color-warning); }
+.neutral { background: var(--color-border); color: var(--color-text-muted); }
+.neutral .dot { background: var(--color-text-faint); }
+.accent { background: var(--color-accent-bg); color: var(--color-accent); }
+.accent .dot { background: var(--color-accent); }
+
+/* Data-quality tone: ACTUAL/CALCULATED/ESTIMATED/LIMITED/UNAVAILABLE. Kept
+   as its own tone set (not reused from gain/loss) because "estimated" is a
+   fact about provenance, not a warning about performance. */
+.quality-actual { background: var(--color-positive-bg); color: var(--color-quality-actual); }
+.quality-actual .dot { background: var(--color-quality-actual); }
+.quality-calculated { background: var(--color-accent-bg); color: var(--color-quality-calculated); }
+.quality-calculated .dot { background: var(--color-quality-calculated); }
+.quality-estimated { background: var(--color-border); color: var(--color-quality-estimated); }
+.quality-estimated .dot { background: var(--color-quality-estimated); }
+.quality-limited { background: var(--color-warning-bg); color: var(--color-quality-limited); }
+.quality-limited .dot { background: var(--color-quality-limited); }
+.quality-unavailable { background: transparent; color: var(--color-text-faint); border-color: var(--color-border); }
+.quality-unavailable .dot { background: var(--color-quality-unavailable); }

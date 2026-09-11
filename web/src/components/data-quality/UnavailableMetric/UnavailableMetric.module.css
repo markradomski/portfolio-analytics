@@ -1,0 +1,5 @@
+.wrap { padding: var(--space-4); border: 1px dashed var(--color-border-strong); border-radius: var(--radius-medium); }
+.header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.title { font: var(--text-h3); color: var(--color-text-muted); }
+.reason { font: var(--text-body); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+.action { margin-top: var(--space-3); }

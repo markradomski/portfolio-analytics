@@ -1,0 +1,8 @@
+.wrap { display: flex; flex-direction: column; gap: var(--space-1); }
+.label { font: var(--text-meta); color: var(--color-text-muted); }
+.value { font: var(--text-figure-lg); font-variant-numeric: tabular-nums; color: var(--color-text); }
+.value.large { font: 600 clamp(1.75rem, 1.3rem + 1.5vw, 2.75rem)/1.1 var(--font-mono); }
+.value.positive { color: var(--color-positive); }
+.value.negative { color: var(--color-negative); }
+.meta { display: flex; align-items: center; gap: var(--space-2); font: var(--text-meta); color: var(--color-text-muted); }
+.unavailable { font: var(--text-body); color: var(--color-text-faint); font-style: italic; }

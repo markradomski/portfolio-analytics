@@ -1,0 +1,6 @@
+.legend { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.legendItem { display: flex; align-items: center; gap: var(--space-3); font: var(--text-body); transition: opacity var(--motion-hover); }
+.swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.label { flex: 1; color: var(--color-text); }
+.weight { font-variant-numeric: tabular-nums; color: var(--color-text-muted); width: 4.5rem; text-align: right; }
+.value { font: var(--text-figure); font-size: 0.875rem; width: 7rem; text-align: right; }

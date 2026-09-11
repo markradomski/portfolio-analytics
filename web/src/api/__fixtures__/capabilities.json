@@ -1,0 +1,118 @@
+{
+  "portfolio_value": {
+    "available": true,
+    "reason": null
+  },
+  "historical_value": {
+    "available": true,
+    "reason": null
+  },
+  "holdings": {
+    "available": true,
+    "reason": null
+  },
+  "contributions": {
+    "available": true,
+    "reason": null
+  },
+  "withdrawals": {
+    "available": true,
+    "reason": null
+  },
+  "income": {
+    "available": true,
+    "reason": null
+  },
+  "capital_gains": {
+    "available": true,
+    "reason": null
+  },
+  "realised_gains": {
+    "available": false,
+    "reason": "No sell transactions recorded"
+  },
+  "unrealised_gains": {
+    "available": true,
+    "reason": null
+  },
+  "twrr": {
+    "available": false,
+    "reason": "Only 0 real valuation(s) -- at least 2 are needed to chain a return"
+  },
+  "xirr": {
+    "available": false,
+    "reason": "Insufficient valuation or transaction data"
+  },
+  "daily_returns": {
+    "available": false,
+    "reason": "Insufficient daily valuation observations"
+  },
+  "weekly_returns": {
+    "available": false,
+    "reason": "Insufficient weekly valuation observations"
+  },
+  "monthly_returns": {
+    "available": false,
+    "reason": "Insufficient monthly valuation observations"
+  },
+  "quarterly_returns": {
+    "available": false,
+    "reason": "Insufficient quarterly valuation observations"
+  },
+  "volatility": {
+    "available": false,
+    "reason": "Only 0 quarterly observations, fewer than the configured minimum of 6"
+  },
+  "sharpe_ratio": {
+    "available": false,
+    "reason": "No risk-free rate configured"
+  },
+  "sortino_ratio": {
+    "available": false,
+    "reason": "No risk-free rate configured"
+  },
+  "beta": {
+    "available": false,
+    "reason": "No benchmark registered"
+  },
+  "correlation": {
+    "available": false,
+    "reason": "No benchmark registered"
+  },
+  "benchmark_comparison": {
+    "available": false,
+    "reason": "No benchmark registered"
+  },
+  "allocation": {
+    "available": true,
+    "reason": null
+  },
+  "sector_allocation": {
+    "available": false,
+    "reason": "Security classification metadata unavailable"
+  },
+  "geographic_allocation": {
+    "available": false,
+    "reason": "Security classification metadata unavailable"
+  },
+  "currency_allocation": {
+    "available": false,
+    "reason": "Security classification metadata unavailable"
+  },
+  "income_yield": {
+    "available": true,
+    "reason": null
+  },
+  "income_growth": {
+    "available": true,
+    "reason": null
+  },
+  "drawdown": {
+    "available": false,
+    "reason": "Insufficient valuation observations to detect a drawdown"
+  },
+  "rolling_metrics": {
+    "available": false,
+    "reason": "Fewer than 8 quarterly observations -- too few for a rolling window"
+  }
+}

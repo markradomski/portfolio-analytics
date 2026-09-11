@@ -1,0 +1,47 @@
+.shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.nav {
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-5) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.brand { font: var(--text-h2); font-family: var(--font-display); margin: 0 0 var(--space-6); color: var(--color-text); }
+.link {
+  font: var(--text-body-strong);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-small);
+  transition: background var(--motion-hover), color var(--motion-hover);
+}
+.link:hover { background: var(--color-border); color: var(--color-text); }
+.link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.linkActive { background: var(--color-text); color: var(--color-surface); }
+.linkActive:hover { background: var(--color-text); color: var(--color-surface); }
+/* Extra right padding keeps page content clear of the fixed ThemeToggle
+   in the top-right corner. */
+.main { padding: var(--space-6) var(--space-8) var(--space-6) var(--space-7); max-width: 1200px; }
+.skipLink {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--color-text); color: var(--color-surface); padding: var(--space-3);
+}
+.skipLink:focus { left: var(--space-3); top: var(--space-3); }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .nav {
+    border-right: none; border-bottom: 1px solid var(--color-border); flex-direction: row;
+    overflow-x: auto; padding: var(--space-3);
+    /* A grid item's default min-width:auto sizes it to fit its content's
+       full width regardless of overflow-x, so the nav's un-scrolled 8-link
+       width was stretching the whole grid track (and the page) wider than
+       the viewport instead of actually scrolling within its own box. */
+    min-width: 0;
+  }
+  /* Room for the fixed ThemeToggle in the top-right on mobile, so the last
+     nav link scrolls clear of it. */
+  .nav { padding-right: 88px; scroll-padding-right: 88px; }
+  .brand { display: none; }
+  .main { padding: var(--space-5); min-width: 0; }
+}

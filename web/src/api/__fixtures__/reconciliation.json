@@ -1,0 +1,28 @@
+{
+  "growth": {
+    "attributed_change": "390.00000",
+    "actual_change": "1890.00000",
+    "residual": "-1500.00000",
+    "tolerance": "0.05",
+    "reconciliation_status": "FAIL",
+    "opening_value": "100.00",
+    "closing_value": "1890.00000",
+    "external_flows": "300.00",
+    "note": null,
+    "difference": "-1500.00000",
+    "status": "FAIL"
+  },
+  "attribution": {
+    "attributed_change": "-10.00000",
+    "actual_change": "-10.00000",
+    "residual": "0.00000",
+    "tolerance": "0.05",
+    "reconciliation_status": "PASS",
+    "opening_value": null,
+    "closing_value": null,
+    "external_flows": null,
+    "note": null,
+    "difference": "0.00000",
+    "status": "PASS"
+  }
+}

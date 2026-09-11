@@ -1,0 +1,22 @@
+{
+  "as_at": "2024-09-30",
+  "current_value": "1890.00000",
+  "total_contributed": "500.00",
+  "total_withdrawn": "-200.00",
+  "net_contributed": "300.00",
+  "investment_growth": "1590.00000",
+  "income_received": "20.00",
+  "data_coverage": {
+    "valuation_start": null,
+    "valuation_end": null,
+    "valuation_observation_count": 0,
+    "transaction_start": "2024-07-02",
+    "transaction_end": "2024-09-28",
+    "price_observation_count": 1,
+    "missing_valuation_count": 66,
+    "actual_observation_count": 0,
+    "carried_forward_observation_count": 0,
+    "estimated_observation_count": 25,
+    "unavailable_observation_count": 66
+  }
+}

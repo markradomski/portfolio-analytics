@@ -1,0 +1,18 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  padding: var(--space-5);
+}
+.flat { box-shadow: none; }
+.raised { box-shadow: var(--shadow-low); }
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.title { font: var(--text-h3); color: var(--color-text); margin: 0; }
+.subtitle { font: var(--text-meta); color: var(--color-text-muted); margin-top: 2px; }

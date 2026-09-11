@@ -1,0 +1,14 @@
+.skeleton {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-border-strong) 37%, var(--color-border) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+.chartSkeleton { width: 100%; }
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; opacity: 0.6; }
+}
