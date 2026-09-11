@@ -2,7 +2,7 @@
 
 **[Live demo](https://portfolio-analytics-mauve.vercel.app)** 
 
-[Repository](https://github.com/markradomski/portfolio-analytics)**
+**[Repository](https://github.com/markradomski/portfolio-analytics)**
 
 A full-stack financial analytics application that transforms broker
 statements and structured transaction exports into a reconciled,
