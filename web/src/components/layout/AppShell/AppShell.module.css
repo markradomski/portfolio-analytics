@@ -48,7 +48,10 @@
   left: var(--space-3);
   bottom: var(--space-3);
   z-index: 10;
-  max-width: 260px;
+  /* Wrap within the 220px sidebar column (.shell's own width, minus this
+     left offset and a matching right margin) rather than 260px, which
+     was wide enough to cross the nav/main divider into the page content. */
+  max-width: calc(220px - var(--space-3) * 2);
   font: var(--text-meta);
   color: var(--color-text-faint);
 }
