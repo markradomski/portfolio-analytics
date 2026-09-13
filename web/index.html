@@ -5,15 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio Analytics</title>
+    <!-- Vanyard's editorial serif (sec 7 of the theme spec) only -- Light/
+         Dark's --font-body stays untouched, so this has no effect on them:
+         Source Serif 4 isn't named anywhere in their font stacks. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap"
+      rel="stylesheet"
+    />
     <script>
       // Apply the saved colour-theme preference before first paint so the
       // page never flashes the wrong theme. Mirrors applyTheme() in
       // src/hooks/useTheme.ts -- "system" (or nothing saved) leaves the
       // attribute off and the prefers-color-scheme media query decides.
+      // "vanyard" is always an explicit choice, never a system default --
+      // there is no prefers-color-scheme: vanyard.
       (function () {
         try {
           var t = localStorage.getItem("theme");
-          if (t === "light" || t === "dark") {
+          if (t === "light" || t === "dark" || t === "vanyard") {
             document.documentElement.setAttribute("data-theme", t);
           }
         } catch (e) {}

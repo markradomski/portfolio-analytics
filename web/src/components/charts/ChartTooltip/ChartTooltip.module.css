@@ -14,3 +14,15 @@
 .value { font: var(--text-figure); color: var(--color-surface); }
 .row { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: 2px; }
 .faint { opacity: 0.75; }
+
+/* Vanyard (sec 21): a light paper tooltip with a hairline border, not the
+   inverted dark chip Light/Dark use -- content/structure unchanged. */
+:global([data-theme="vanyard"]) .tooltip {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-low);
+}
+:global([data-theme="vanyard"]) .date { color: var(--color-text); }
+:global([data-theme="vanyard"]) .value { color: var(--color-text); }
+:global([data-theme="vanyard"]) .faint { color: var(--color-text-muted); opacity: 1; }

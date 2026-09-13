@@ -230,9 +230,12 @@ export function BalanceDecompositionChart({ points, width, height }: BalanceDeco
               stroke="var(--color-text-muted)" strokeWidth={1.5} />
 
         {/* Primary series: Portfolio Balance -- most visually prominent,
-            drawn last so it always sits on top of both fills. */}
+            drawn last so it always sits on top of both fills. Its own
+            token (aliased to --color-accent in Light/Dark) so Vanyard can
+            give it the brand burgundy without recolouring every other
+            accent use on the page -- see tokens.css. */}
         <path data-role="portfolio-balance-line" d={balanceLine(parsed) ?? undefined} fill="none"
-              stroke="var(--color-accent)" strokeWidth={2.5} />
+              stroke="var(--color-balance)" strokeWidth={2.5} />
 
         {events.map((d, i) => {
           const x = xScale(d.date);

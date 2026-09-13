@@ -2,6 +2,14 @@
 .label { font: var(--text-meta); color: var(--color-text-muted); }
 .value { font: var(--text-figure-lg); font-variant-numeric: tabular-nums; color: var(--color-text); }
 .value.large { font: 600 clamp(1.75rem, 1.3rem + 1.5vw, 2.75rem)/1.1 var(--font-mono); }
+/* Vanyard (sec 9/14): the hero/primary portfolio figure gets the editorial
+   serif treatment; every other metric value (including smaller ones on the
+   same page) stays the tabular monospace figure font -- the tension
+   between the two is deliberate (sec 8 of the theme spec). */
+:global([data-theme="vanyard"]) .value.large {
+  font-family: var(--font-display);
+  font-variant-numeric: normal;
+}
 .value.positive { color: var(--color-positive); }
 .value.negative { color: var(--color-negative); }
 .meta { display: flex; align-items: center; gap: var(--space-2); font: var(--text-meta); color: var(--color-text-muted); }

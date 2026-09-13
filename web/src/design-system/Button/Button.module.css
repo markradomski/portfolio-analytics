@@ -38,3 +38,13 @@
 .ghost:hover:not(:disabled) { color: var(--color-text); background: var(--color-border); }
 
 .small { padding: var(--space-1) var(--space-3); font-size: 0.8125rem; }
+
+/* Vanyard (sec 12/18): primary actions are the brand burgundy, not the
+   monochrome charcoal Light/Dark use -- secondary already matches (paper
+   surface, charcoal text, warm-grey border) with no change needed. */
+:global([data-theme="vanyard"]) .primary {
+  background: var(--color-accent);
+}
+:global([data-theme="vanyard"]) .primary:hover:not(:disabled) {
+  background: var(--color-accent-strong, var(--color-accent));
+}

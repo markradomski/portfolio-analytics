@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 
-import { useTheme, type ResolvedTheme } from "../../../hooks/useTheme";
+import { useThemeContext } from "../../../hooks/ThemeContext";
+import type { ActiveTheme } from "../../../hooks/useTheme";
 import styles from "./ThemeToggle.module.css";
 
 /** Thin-line sun / crescent-moon marks, drawn from the design token
@@ -37,37 +38,50 @@ function MoonIcon() {
   );
 }
 
-const OPTIONS: { theme: ResolvedTheme; label: string; Icon: () => ReactElement }[] = [
+/** The supplied Vanyard ship/iceberg artwork, isolated to a transparent-
+ * background silhouette (see assets/ship-mask.png's provenance in
+ * VanyardLogo) and painted with `background-color: currentColor` through a
+ * CSS mask -- so, like the sun/moon marks either side of it, it inherits
+ * the button's colour rather than carrying its own fixed burgundy/white. */
+function ShipIcon() {
+  return <span className={`${styles.icon} ${styles.shipIcon}`} aria-hidden="true" />;
+}
+
+const OPTIONS: { theme: ActiveTheme; label: string; Icon: () => ReactElement }[] = [
   { theme: "light", label: "Light", Icon: SunIcon },
   { theme: "dark", label: "Dark", Icon: MoonIcon },
+  { theme: "vanyard", label: "Vanyard", Icon: ShipIcon },
 ];
 
 /**
- * A two-mark switch for the colour theme, sitting top-right on every page
+ * A three-mark switch for the colour theme, sitting top-right on every page
  * (rendered once by `AppShell`). The mark matching what is currently shown
- * is highlighted; clicking the other switches to it. Clicking the mark that
- * is already the explicit choice returns to following the OS
- * (`prefers-color-scheme`).
+ * is highlighted; clicking another switches to it. Clicking the mark that
+ * is already the explicit Light/Dark choice returns to following the OS
+ * (`prefers-color-scheme`) -- "vanyard" has no OS equivalent, so picking it
+ * is always a plain explicit selection (see useTheme's `toggleTo`).
  */
 export function ThemeToggle() {
-  const { preference, resolved, toggleTo } = useTheme();
+  const { preference, resolved, toggleTo } = useThemeContext();
 
   return (
     <div className={styles.group} role="group" aria-label="Colour theme">
       {OPTIONS.map(({ theme, label, Icon }) => {
         const active = resolved === theme;
         const isExplicit = preference === theme;
+        const title =
+          theme === "vanyard"
+            ? "Switch to Vanyard theme"
+            : isExplicit
+              ? `${label} theme — click to match your system setting`
+              : `Switch to ${label.toLowerCase()} theme`;
         return (
           <button
             key={theme}
             type="button"
             className={`${styles.option} ${active ? styles.active : ""}`}
             aria-pressed={active}
-            title={
-              isExplicit
-                ? `${label} theme — click to match your system setting`
-                : `Switch to ${label.toLowerCase()} theme`
-            }
+            title={title}
             onClick={() => toggleTo(theme)}
           >
             <Icon />

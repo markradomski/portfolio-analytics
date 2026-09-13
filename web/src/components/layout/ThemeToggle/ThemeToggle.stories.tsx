@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { ThemeProvider } from "../../../hooks/ThemeContext";
 import { ThemeToggle } from "./ThemeToggle";
 
 /**
@@ -12,9 +13,11 @@ const meta: Meta<typeof ThemeToggle> = {
   component: ThemeToggle,
   decorators: [
     (Story) => (
-      <div style={{ position: "relative", height: 80 }}>
-        <Story />
-      </div>
+      <ThemeProvider>
+        <div style={{ position: "relative", height: 80 }}>
+          <Story />
+        </div>
+      </ThemeProvider>
     ),
   ],
 };

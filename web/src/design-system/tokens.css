@@ -29,6 +29,14 @@
   --color-accent: #1d4ed8;
   --color-accent-bg: #eff6ff;
 
+  /* Portfolio Growth's two chart series that happen to share a colour in
+     Light/Dark (the total-balance line and the contributions area, both
+     --color-accent at different opacities) get their own tokens so a theme
+     can diverge them -- Vanyard does (burgundy balance vs blue
+     contribution) without touching Light/Dark's existing appearance. */
+  --color-balance: var(--color-accent);
+  --color-contribution: var(--color-accent);
+
   /* data-quality tokens: distinct from gain/loss semantics on purpose --
      "estimated" is not a warning, it's a fact about provenance. */
   --color-quality-actual: #15803d;
@@ -166,6 +174,73 @@
   --chart-series-6: #22d3ee;
   --chart-grid: #2a2620;
   --chart-axis: #786e60;
+}
+
+/**
+ * Vanyard Light -- a fictional/parody investment-platform identity (see
+ * docs/vanyard-theme.md). Restrained, editorial, warm-paper; burgundy
+ * identifies brand/interactive accents only, never floods the page. Every
+ * token name is the same one Light/Dark already define -- no component
+ * branches on this theme, it only ever reads these custom properties.
+ */
+:root[data-theme="vanyard"] {
+  --color-background: #f9f7f4; /* warm paper, never clinical white */
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-secondary: #faf9f6; /* cream: secondary surfaces, table headers */
+  --color-border: #e8e4de; /* light stone: gridlines, dividers */
+  --color-border-strong: #d9d4cc; /* warm sand: stronger separators */
+
+  --color-text: #222222; /* charcoal */
+  --color-text-muted: #6f6962; /* warm grey: metadata, micro-headings */
+  --color-text-faint: #8a847d; /* muted grey: tertiary/disabled only */
+
+  --color-positive: #218653; /* investment gain -- distinct from brand */
+  /* Near-white rather than a visible tint: at this foreground's own
+     luminance, any real tint drops small badge text below 4.5:1 (WCAG AA)
+     -- see docs/vanyard-theme.md's accessibility note. */
+  --color-positive-bg: #ffffff;
+  --color-negative: #c94c4c; /* investment loss */
+  --color-negative-bg: #ffffff;
+  --color-warning: #a15c1f;
+  --color-warning-bg: #f7efe4;
+
+  --color-accent: #8c1d2c; /* Vanyard Burgundy: brand, links, active nav, focus */
+  --color-accent-bg: #f4e9eb; /* Burgundy Tint */
+  --color-accent-strong: #68141f; /* Deep Burgundy: hover/pressed */
+
+  --color-balance: #8c1d2c; /* Portfolio Growth's total-balance line */
+  --color-contribution: #3b6ea8; /* ...stays a distinct, non-brand blue */
+
+  --color-quality-actual: #218653;
+  --color-quality-calculated: #3b6ea8;
+  --color-quality-estimated: #8a847d;
+  --color-quality-limited: #a15c1f;
+  --color-quality-unavailable: #d9d4cc;
+  --color-unknown: #8a847d;
+
+  /* Source Serif 4 for editorial moments only (hero values, greetings) --
+     var(--font-body) is deliberately untouched, so Vanyard's interface text
+     keeps reusing whatever Light/Dark already resolve to (sec 7: "reuse the
+     existing installation" rather than loading a second sans-serif that
+     could also shift Light/Dark's own rendering). */
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --radius-small: 4px;
+  --radius-medium: 6px;
+  --radius-large: 10px;
+
+  --shadow-low: 0 1px 2px rgba(34, 34, 34, 0.05);
+  --shadow-medium: 0 2px 10px rgba(34, 34, 34, 0.06);
+
+  --chart-series-1: #3b6ea8;
+  --chart-series-2: #a15c1f;
+  --chart-series-3: #218653;
+  --chart-series-4: #8c1d2c;
+  --chart-series-5: #6f6962;
+  --chart-series-6: #5b7c99;
+  --chart-grid: #e8e4de;
+  --chart-axis: #8a847d;
 }
 
 body {

@@ -36,7 +36,7 @@ export interface PerformanceDecompositionChartProps {
  * hovering. These are financial-sign colours, deliberately unrelated to
  * the data-quality / capability / reconciliation colour vocabularies. */
 const LEGEND_ITEMS: ChartLegendItem[] = [
-  { label: "Total Balance", color: "var(--color-accent)", shape: "line" },
+  { label: "Total Balance", color: "var(--color-balance)", shape: "line" },
   { label: "Contributions & Withdrawals", color: "var(--color-accent-bg)", shape: "area" },
   { label: "Investment Gain", color: "var(--color-positive)", shape: "area", opacity: 0.9 },
   { label: "Investment Loss", color: "var(--color-negative)", shape: "area", opacity: 0.9 },

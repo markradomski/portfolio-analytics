@@ -17,3 +17,15 @@
 .sortIcon { margin-left: var(--space-1); opacity: 0.6; }
 .row:hover td { background: var(--color-border); }
 .row:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* Vanyard (sec 11/17): cream header row, restrained hover -- structure,
+   sorting and every other row/cell mechanic is untouched. */
+:global([data-theme="vanyard"]) .table th {
+  background: var(--color-surface-secondary, var(--color-background));
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+:global([data-theme="vanyard"]) .row:hover td {
+  background: var(--color-surface-secondary, var(--color-background));
+}

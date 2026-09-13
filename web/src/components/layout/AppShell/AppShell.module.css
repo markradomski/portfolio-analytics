@@ -7,6 +7,7 @@
   gap: var(--space-1);
 }
 .brand { font: var(--text-h2); font-family: var(--font-display); margin: 0 0 var(--space-6); color: var(--color-text); }
+.vanyardBrand { margin: 0 0 var(--space-6); }
 .link {
   font: var(--text-body-strong);
   color: var(--color-text-muted);
@@ -19,6 +20,33 @@
 .link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
 .linkActive { background: var(--color-text); color: var(--color-surface); }
 .linkActive:hover { background: var(--color-text); color: var(--color-surface); }
+
+/* Vanyard (sec 13): the existing sidebar stays the existing sidebar --
+   only the nav's own surface/active-state colours and the brand mark
+   change. Preserving the current vertical-nav mechanism (rather than the
+   spec's horizontal-header sketch) is a deliberate compromise so the
+   existing responsive information architecture is never touched -- see
+   docs/vanyard-theme.md. */
+:global([data-theme="vanyard"]) .nav {
+  background: var(--color-surface-secondary, var(--color-background));
+}
+:global([data-theme="vanyard"]) .link:hover { background: var(--color-accent-bg); color: var(--color-accent-strong, var(--color-accent)); }
+:global([data-theme="vanyard"]) .linkActive {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+:global([data-theme="vanyard"]) .linkActive:hover { background: var(--color-accent-bg); color: var(--color-accent); }
+
+.disclaimer {
+  display: none;
+  margin-top: auto;
+  padding-top: var(--space-4);
+  font: var(--text-meta);
+  color: var(--color-text-faint);
+}
+:global([data-theme="vanyard"]) .disclaimer { display: block; }
+
 /* Extra right padding keeps page content clear of the fixed ThemeToggle
    in the top-right corner. */
 .main { padding: var(--space-6) var(--space-8) var(--space-6) var(--space-7); max-width: 1200px; }
@@ -39,9 +67,9 @@
        the viewport instead of actually scrolling within its own box. */
     min-width: 0;
   }
-  /* Room for the fixed ThemeToggle in the top-right on mobile, so the last
-     nav link scrolls clear of it. */
-  .nav { padding-right: 88px; scroll-padding-right: 88px; }
-  .brand { display: none; }
+  /* Room for the fixed ThemeToggle (now three marks) in the top-right on
+     mobile, so the last nav link scrolls clear of it. */
+  .nav { padding-right: 116px; scroll-padding-right: 116px; }
+  .brand, .vanyardBrand, .disclaimer { display: none; }
   .main { padding: var(--space-5); min-width: 0; }
 }

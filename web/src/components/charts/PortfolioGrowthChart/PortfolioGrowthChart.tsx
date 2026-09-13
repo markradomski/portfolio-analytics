@@ -192,19 +192,22 @@ export function PortfolioGrowthChart({ points, width, height }: PortfolioGrowthC
                 fillOpacity={0.85} stroke="none" />
         ))}
 
-        {/* Contributions -- solid blue area, floored at $0. */}
+        {/* Contributions -- solid blue area, floored at $0. Its own token
+            (aliased to --color-accent in Light/Dark, distinct in Vanyard)
+            so a brand-coloured theme can still tell "money you put in"
+            apart from "the balance line" -- see tokens.css. */}
         <path data-role="contributions-area" d={contributionsArea(parsed) ?? undefined}
-              fill="var(--color-accent)" fillOpacity={0.28} stroke="none" />
+              fill="var(--color-contribution)" fillOpacity={0.28} stroke="none" />
 
         {/* The $0 baseline -- explicit and distinct from the gridlines: the
             hard visual floor every area rests on. */}
         <line data-role="zero-baseline" x1={0} x2={innerWidth} y1={yScale(0)} y2={yScale(0)}
               stroke="var(--chart-axis)" strokeWidth={1} />
 
-        {/* Total Balance -- the strong blue line, on top of everything,
+        {/* Total Balance -- the strong line, on top of everything,
             authoritative and never clamped. */}
         <path data-role="portfolio-balance-line" d={balanceLine(parsed) ?? undefined} fill="none"
-              stroke="var(--color-accent)" strokeWidth={2.5} />
+              stroke="var(--color-balance)" strokeWidth={2.5} />
 
         <rect
           className={styles.interactionLayer}

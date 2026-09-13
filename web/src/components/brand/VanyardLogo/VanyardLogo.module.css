@@ -1,0 +1,42 @@
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* The supplied artwork's own tile (rounded square + ship) already carries
+   its background and colour -- this just sizes and displays it, no
+   recolouring or background layered underneath. */
+.tile {
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.small { width: 28px; height: 28px; }
+.medium { width: 40px; height: 40px; }
+.large { width: 64px; height: 64px; }
+
+.wordmarkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.375rem;
+  line-height: 1;
+  color: var(--color-accent);
+}
+.registered {
+  font-size: 0.5em;
+  font-weight: 400;
+  margin-left: 1px;
+}
+.tagline {
+  font: var(--text-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+}

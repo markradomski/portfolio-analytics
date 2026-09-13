@@ -46,6 +46,24 @@
   display: block;
 }
 
+/* A CSS mask of the supplied Vanyard ship/iceberg artwork -- see its
+   provenance note in ThemeToggle.tsx / VanyardLogo. `currentColor` via
+   `background-color` is how it matches the sun/moon marks' behaviour
+   despite being a raster asset, not stroked SVG. */
+.shipIcon {
+  width: 18px;
+  height: 18px;
+  background-color: currentColor;
+  mask-image: url("../../brand/VanyardLogo/assets/ship-mask.png");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("../../brand/VanyardLogo/assets/ship-mask.png");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;

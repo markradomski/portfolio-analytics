@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import { AppShell } from "../components/layout/AppShell/AppShell";
 import { ErrorBoundary } from "../components/common/ErrorBoundary/ErrorBoundary";
+import { ThemeProvider } from "../hooks/ThemeContext";
 import { ContributionsPage } from "../features/contributions/ContributionsPage";
 import { GainsPage } from "../features/gains/GainsPage";
 import { HistoryPage } from "../features/history/HistoryPage";
@@ -88,11 +89,13 @@ export function App() {
        * itself, outside any one page. The per-route boundary below is
        * expected to catch almost everything a page can throw. */}
       <ErrorBoundary>
-        <BrowserRouter>
-          <AppShell>
-            <RoutedContent />
-          </AppShell>
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <AppShell>
+              <RoutedContent />
+            </AppShell>
+          </BrowserRouter>
+        </ThemeProvider>
       </ErrorBoundary>
     </QueryClientProvider>
   );

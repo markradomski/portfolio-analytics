@@ -46,7 +46,7 @@ describe("PortfolioGrowthChart", () => {
   it("fills Contributions as a solid blue area from the $0 floor up to net contributions", () => {
     const { container } = render(<PortfolioGrowthChart points={gainSeries} width={600} height={300} />);
     const fill = container.querySelector('[data-role="contributions-area"]')!;
-    expect(fill.getAttribute("fill")).toBe("var(--color-accent)");
+    expect(fill.getAttribute("fill")).toBe("var(--color-contribution)");
     const ys = pathYs(fill);
     // Nothing below the axis; the top edge sits above it.
     expect(Math.max(...ys)).toBeLessThanOrEqual(baselineY(container) + 0.5);

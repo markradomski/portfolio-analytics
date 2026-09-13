@@ -6,15 +6,23 @@ import { useCallback, useEffect, useState } from "react";
  *
  *   "system" -> no `data-theme` attribute; the CSS `@media
  *               (prefers-color-scheme: dark)` block decides.
- *   "light" / "dark" -> `data-theme` set on <html>, which the token file's
- *               `:root[data-theme=...]` rules honour over the media query.
+ *   "light" / "dark" / "vanyard" -> `data-theme` set on <html>, which the
+ *               token file's `:root[data-theme=...]` rules honour over the
+ *               media query.
+ *
+ * "vanyard" is always an explicit choice -- there is no
+ * `prefers-color-scheme: vanyard`, so it can never be what "system" resolves
+ * to (see `ResolvedTheme` vs `ActiveTheme` below).
  *
  * The choice persists in `localStorage` under `theme`. "system" clears the
  * key, so the app goes back to following the OS. Every access is guarded so
  * the hook is safe under jsdom / a private window / disabled storage.
  */
-export type ThemePreference = "light" | "dark" | "system";
+export type ThemePreference = "light" | "dark" | "vanyard" | "system";
+/** What `prefers-color-scheme` can actually resolve to. */
 export type ResolvedTheme = "light" | "dark";
+/** What is actually applied to `<html data-theme=...>` right now. */
+export type ActiveTheme = "light" | "dark" | "vanyard";
 
 const STORAGE_KEY = "theme";
 const DARK_QUERY = "(prefers-color-scheme: dark)";
@@ -22,7 +30,7 @@ const DARK_QUERY = "(prefers-color-scheme: dark)";
 function readStored(): ThemePreference {
   try {
     const v = window.localStorage.getItem(STORAGE_KEY);
-    if (v === "light" || v === "dark") return v;
+    if (v === "light" || v === "dark" || v === "vanyard") return v;
   } catch {
     /* storage unavailable -- fall through to system */
   }
@@ -49,11 +57,13 @@ export interface UseThemeResult {
   /** What the user picked. */
   preference: ThemePreference;
   /** What is actually showing right now (system resolved to light/dark). */
-  resolved: ResolvedTheme;
+  resolved: ActiveTheme;
   setPreference: (next: ThemePreference) => void;
-  /** Pick this theme, or return to "system" if it is already the explicit
-   * choice -- lets a two-icon switch still reach the follow-the-OS state. */
-  toggleTo: (theme: ResolvedTheme) => void;
+  /** Pick this theme -- for "light"/"dark", returns to "system" if it is
+   * already the explicit choice (lets a switch still reach the
+   * follow-the-OS state); "vanyard" has no system equivalent, so picking it
+   * always just selects it explicitly. */
+  toggleTo: (theme: ActiveTheme) => void;
 }
 
 export function useTheme(): UseThemeResult {
@@ -88,10 +98,14 @@ export function useTheme(): UseThemeResult {
     }
   }, []);
 
-  const resolved: ResolvedTheme = preference === "system" ? system : preference;
+  const resolved: ActiveTheme = preference === "system" ? system : preference;
 
   const toggleTo = useCallback(
-    (theme: ResolvedTheme) => {
+    (theme: ActiveTheme) => {
+      if (theme === "vanyard") {
+        setPreference("vanyard");
+        return;
+      }
       setPreference(preference === theme ? "system" : theme);
     },
     [preference, setPreference],
