@@ -3,9 +3,19 @@ import { NavLink, useSearchParams } from "react-router-dom";
 
 import { VanyardLogo } from "../../brand/VanyardLogo/VanyardLogo";
 import { useThemeContext } from "../../../hooks/ThemeContext";
+import type { ActiveTheme } from "../../../hooks/useTheme";
 import { getStoredPeriod } from "../../../lib/periodStorage";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import styles from "./AppShell.module.css";
+
+// Light and Dark share the app's one brand mark (no separate dark-tuned
+// icon exists); Vanyard's is the cropped ship-tile artwork (see
+// VanyardLogo's own provenance note).
+const FAVICON_BY_THEME: Record<ActiveTheme, { href: string; type: string }> = {
+  light: { href: "/favicon.svg", type: "image/svg+xml" },
+  dark: { href: "/favicon.svg", type: "image/svg+xml" },
+  vanyard: { href: "/vanyard-favicon.png", type: "image/png" },
+};
 
 const NAV_ITEMS = [
   // Overview and Performance both read/write the shared "period" query
@@ -36,6 +46,19 @@ export function AppShell({ children }: { children: ReactNode }) {
   // normal title on unmount/theme change rather than leaving it stuck.
   useEffect(() => {
     document.title = resolved === "vanyard" ? "Vanyard | Portfolio Analytics" : "Portfolio Analytics";
+  }, [resolved]);
+
+  // Same idea for the tab icon, explicit per scheme rather than a single
+  // vanyard/not-vanyard branch: Light and Dark share the app's one brand
+  // mark (no separate dark-tuned icon exists), Vanyard gets its own ship
+  // mark. Reuses the single <link rel="icon"> from index.html rather than
+  // adding a second tag.
+  useEffect(() => {
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!link) return;
+    const favicon = FAVICON_BY_THEME[resolved];
+    link.type = favicon.type;
+    link.href = favicon.href;
   }, [resolved]);
 
   return (
