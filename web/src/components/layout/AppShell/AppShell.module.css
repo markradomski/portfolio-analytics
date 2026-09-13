@@ -38,10 +38,17 @@
 }
 :global([data-theme="vanyard"]) .linkActive:hover { background: var(--color-accent-bg); color: var(--color-accent); }
 
+/* Fixed-positioned and a sibling of `.nav` in the markup (AppShell.tsx) --
+   deliberately outside both the sidebar's column flow and the mobile
+   breakpoint's row flow, so it can never be squeezed into either layout
+   again. Low z-index: it should sit under the ThemeToggle, never over it. */
 .disclaimer {
   display: none;
-  margin-top: auto;
-  padding-top: var(--space-4);
+  position: fixed;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 10;
+  max-width: 260px;
   font: var(--text-meta);
   color: var(--color-text-faint);
 }
@@ -71,5 +78,12 @@
      mobile, so the last nav link scrolls clear of it. */
   .nav { padding-right: 116px; scroll-padding-right: 116px; }
   .brand, .vanyardBrand, .disclaimer { display: none; }
+  /* Same specificity as the vanyard-scoped display:block rule above (both
+     one class + one attribute selector) so this actually wins by source
+     order -- a plain ".disclaimer { display: none }" here was silently
+     losing to that rule regardless of the media query, which is why the
+     disclaimer kept showing (and, while it lived inside .nav, breaking
+     the mobile nav strip) at narrow widths. */
+  :global([data-theme="vanyard"]) .disclaimer { display: none; }
   .main { padding: var(--space-5); min-width: 0; }
 }

@@ -85,15 +85,22 @@ export function AppShell({ children }: { children: ReactNode }) {
             {item.label}
           </NavLink>
         ))}
-        {/* Sec 24: a subtle, low-priority disclaimer -- always in the DOM,
-            only shown at all when Vanyard is active (AppShell.module.css). */}
-        <p className={styles.disclaimer}>
-          Vanyard is a fictional portfolio analytics demonstration and is not affiliated with Vanguard.
-        </p>
       </nav>
       <main id="main" className={styles.main} tabIndex={-1}>
         {children}
       </main>
+      {/* Sec 24: a subtle, low-priority disclaimer -- always in the DOM,
+          only shown at all when Vanyard is active (AppShell.module.css).
+          Deliberately a sibling of `.nav`, not a child of it: it used to
+          live inside the nav's own flex flow and broke at the mobile
+          breakpoint, where nav switches to flex-direction: row (its
+          display:none there was also being beaten on specificity by the
+          vanyard-scoped display:block rule -- fixed alongside this move,
+          see AppShell.module.css). Fixed-positioned so it never
+          participates in either layout at all. */}
+      <p className={styles.disclaimer}>
+        Vanyard is a fictional portfolio analytics demonstration and is not affiliated with Vanguard.
+      </p>
     </div>
   );
 }
