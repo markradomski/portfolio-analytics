@@ -63,7 +63,9 @@ const overview: PortfolioOverview = {
 
 function period(overrides: Partial<PerformancePeriod>): PerformancePeriod {
   return {
-    label: "1Y", as_at: "2026-06-30", start_date: "2025-06-30", end_date: "2026-06-30",
+    // "INCEPTION" (displayed as "MAX") is the page's default-selected
+    // period -- see PerformancePage's PERIOD_URL_MAPPING.
+    label: "INCEPTION", as_at: "2026-06-30", start_date: "2025-06-30", end_date: "2026-06-30",
     total_return: "0.199", capital_return: "0.16", income_return: "0.057", twrr: "0.151",
     xirr: "0.004", status: "actual", note: null, ...overrides,
   };
@@ -226,7 +228,9 @@ describe("PerformancePage: period selector", () => {
   it("marks the default-selected period as selected", () => {
     setupDefaults();
     renderPage();
-    expect(screen.getByRole("tab", { name: "1Y" })).toHaveAttribute("aria-selected", "true");
+    // Displayed as "MAX" (PerformanceChart's PERIOD_DISPLAY), backed by the
+    // "INCEPTION" period label -- the page's default selection.
+    expect(screen.getByRole("tab", { name: "MAX" })).toHaveAttribute("aria-selected", "true");
   });
 });
 

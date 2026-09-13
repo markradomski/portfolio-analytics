@@ -8,6 +8,7 @@ import { Skeleton } from "../../components/common/Skeleton/Skeleton";
 import { MetricValue } from "../../design-system/MetricValue/MetricValue";
 import { Tabs, type TabItem } from "../../design-system/Tabs/Tabs";
 import { usePortfolioGrowth, usePortfolioGrowthSummary } from "../../hooks/api/usePortfolioApi";
+import { getStoredPeriod, setStoredPeriod } from "../../lib/periodStorage";
 import { formatMoney, formatMoneySigned, formatPercentSigned } from "../../formatting/money";
 import type { PortfolioGrowthPoint, PortfolioGrowthSummary } from "../../api/types";
 import styles from "./PortfolioGrowthSection.module.css";
@@ -106,15 +107,23 @@ export function PortfolioGrowthSection({ rateOfReturn, contributed, withdrawn }:
   const growth = usePortfolioGrowth();
   const summary = usePortfolioGrowthSummary();
   const [searchParams, setSearchParams] = useSearchParams();
-  const requested = searchParams.get("growthPeriod");
+  // "period" is the one query param every period-tab section (this chart,
+  // the Performance screen) reads and writes, so the selected window
+  // persists across the "View performance"/"Back to Overview" links --
+  // never each section keeping its own independent selection. Falls back
+  // to the last value persisted in localStorage when the URL has no
+  // "period" param at all (a detour through a screen that doesn't carry
+  // one, e.g. Holdings), so the selection survives that detour too.
+  const requested = searchParams.get("period") ?? getStoredPeriod();
   const period: Period = (PERIODS as readonly string[]).includes(requested ?? "")
     ? (requested as Period) : DEFAULT_PERIOD;
 
   function setPeriod(value: string) {
+    setStoredPeriod(value);
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev);
-        next.set("growthPeriod", value);
+        next.set("period", value);
         return next;
       },
       { replace: true },

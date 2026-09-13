@@ -29,11 +29,24 @@ const PERIOD_LABELS = ["1M", "3M", "6M", "YTD", "1Y", "3Y", "5Y", "INCEPTION"];
  * -- entirely by visualising Phase 4's own analytics endpoints (sec 2). No
  * figure here is derived by anything other than formatting or selection.
  */
+// The shared `period` URL param (also used by the Overview's Portfolio
+// Growth chart) spells full-history "MAX"; this screen's own vocabulary
+// (and the backend's PerformancePeriod label) calls the same thing
+// "INCEPTION". This is the one place that rename happens, so the
+// selected window persists across the Overview <-> Performance links.
+const PERIOD_URL_MAPPING = {
+  fromUrl: (v: string) => (v === "MAX" ? "INCEPTION" : v),
+  toUrl: (v: string) => (v === "INCEPTION" ? "MAX" : v),
+};
+
 export function PerformancePage() {
   const data = usePerformanceData();
-  const { selected, setSelected, activePeriod } = useSelectedPeriod(data.periods.data, PERIOD_LABELS, "1Y");
+  const { selected, setSelected, activePeriod } = useSelectedPeriod(
+    data.periods.data, PERIOD_LABELS, "INCEPTION", PERIOD_URL_MAPPING,
+  );
   const start = activePeriod?.start_date ?? undefined;
   const end = activePeriod?.end_date ?? undefined;
+  const overviewHref = `/?period=${PERIOD_URL_MAPPING.toUrl(selected)}`;
 
   const overview = usePerformanceOverview(start, end);
   const attribution = useAttribution(start, end);
@@ -50,7 +63,7 @@ export function PerformancePage() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <a href="/" className={styles.backLink}>← Back to Overview</a>
+        <a href={overviewHref} className={styles.backLink}>← Back to Overview</a>
         <h1>Performance</h1>
         <p className={styles.description}>
           Portfolio returns across time, separated into capital growth and income and adjusted for external cash

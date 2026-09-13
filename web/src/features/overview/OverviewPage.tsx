@@ -24,21 +24,16 @@ import styles from "./OverviewPage.module.css";
  * responses (sec 2). No figure here is derived by anything other than
  * formatting, sorting, filtering or mapping already-computed API data.
  */
-/** The growth chart's own period vocabulary uses "MAX" for full history;
- * the Performance screen's period selector calls the same thing
- * "INCEPTION". Every other label is shared 1:1, so carrying the selection
- * across the "View performance →" link is just this one rename. */
-function toPerformancePeriod(growthPeriod: string | null): string {
-  if (!growthPeriod) return "INCEPTION";
-  return growthPeriod === "MAX" ? "INCEPTION" : growthPeriod;
-}
-
 export function OverviewPage() {
   const data = useOverviewData();
   const inception = data.periods.data?.find((p) => p.label === "INCEPTION");
   const lifetime = data.overview.data;
   const [searchParams] = useSearchParams();
-  const performanceHref = `/performance?period=${toPerformancePeriod(searchParams.get("growthPeriod"))}`;
+  // The Performance screen reads/writes the same "period" param (via
+  // useSelectedPeriod's url mapping, which translates this chart's "MAX"
+  // to its own "INCEPTION" label) -- so the selected window carries
+  // straight across the "View performance ->" link with no rename here.
+  const performanceHref = `/performance?period=${searchParams.get("period") ?? "MAX"}`;
 
   return (
     <div className={styles.page}>
