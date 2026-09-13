@@ -34,8 +34,10 @@ const DEFAULT_PERIOD: Period = "MAX";
  * `net_contributions` on that date), not a value re-based to zero -- a
  * point outside the visible window is simply not drawn, never zeroed.
  *
- * YTD is "1 January of the *current calendar year* through the latest
- * available date" -- not "the last 12 months" -- and every period
+ * YTD is "1 January of the year containing the series' own latest
+ * available date, through that latest date" -- never the browser's wall-
+ * clock year, since the series can end well before "now" -- and not "the
+ * last 12 months" either. Every period
  * gracefully clamps to the earliest date the series actually has, rather
  * than producing an empty chart when less history exists than the period
  * asks for (e.g. 5Y selected with only 4 years of data).
@@ -48,7 +50,12 @@ export function sliceByPeriod(points: PortfolioGrowthPoint[], period: Period): P
   let cutoff: Date;
 
   if (period === "YTD") {
-    cutoff = new Date(new Date().getFullYear(), 0, 1);
+    // Anchored to the dataset's own latest point, never the browser's wall-
+    // clock date -- the series can (and for the demo dataset, does) end
+    // before "now". No requirement that a Jan-1 point exists exactly: the
+    // p.date >= cutoff filter below naturally picks the first point on or
+    // after it.
+    cutoff = new Date(last.getFullYear(), 0, 1);
   } else {
     cutoff = new Date(last);
     if (period === "1M") cutoff.setMonth(cutoff.getMonth() - 1);

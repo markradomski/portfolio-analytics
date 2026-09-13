@@ -73,6 +73,19 @@ describe("sliceByPeriod", () => {
       ];
       expect(sliceByPeriod(points, "YTD").map((p) => p.date)).toEqual(["2026-01-01", "2026-06-30"]);
     });
+
+    it("anchors to the series' own latest year, not the browser's wall-clock year, when the series ends before 'now'", () => {
+      // "Today" is 2026 (see beforeEach), but the series -- like the demo
+      // dataset -- ends in 2024. YTD must still return the tail of 2024,
+      // not an empty array (the exact bug this regression test covers).
+      const points = [point("2023-06-30"), point("2024-01-01"), point("2024-06-30")];
+      expect(sliceByPeriod(points, "YTD").map((p) => p.date)).toEqual(["2024-01-01", "2024-06-30"]);
+    });
+
+    it("picks the first available point on or after 1 January when no exact 1 Jan point exists", () => {
+      const points = [point("2023-11-30"), point("2024-02-15"), point("2024-06-30")];
+      expect(sliceByPeriod(points, "YTD").map((p) => p.date)).toEqual(["2024-02-15", "2024-06-30"]);
+    });
   });
 
   it("gracefully clamps to the earliest available date rather than returning an empty series (insufficient history)", () => {

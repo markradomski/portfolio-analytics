@@ -5,6 +5,7 @@ Nothing here is real financial data -- see tools/generate_demo_data.py.
 
 from __future__ import annotations
 
+from datetime import date
 from decimal import Decimal
 
 import pytest
@@ -12,7 +13,7 @@ import pytest
 from src.database.repository import Repository
 from src.engine.reporting import summary
 from src.engine.service import PortfolioService
-from tools.generate_demo_data import QUARTER_ENDS, SECURITIES, build_database
+from tools.generate_demo_data import MONTHS, SECURITIES, build_database
 
 
 @pytest.fixture(scope="module")
@@ -53,7 +54,8 @@ def test_cash_never_goes_negative(demo_db):
         from src.engine.ledger import Ledger
         ledger = Ledger.from_repository(repo)
         cash = CashEngine()
-        for when in QUARTER_ENDS:
+        for month in MONTHS:
+            when = date(month.year, month.month, 28)
             assert cash.balance_at(ledger, when) >= Decimal("0"), when
     finally:
         repo.close()
