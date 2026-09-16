@@ -1,8 +1,9 @@
 # Portfolio Analytics
 
 **Live Demo:** https://portfolio-analytics-mauve.vercel.app
+
 **API:** https://portfolio-analytics-xtto.onrender.com
-**Repository:** https://github.com/markradomski/portfolio-analytics
+
 
 A full-stack financial analytics application that transforms broker
 statements and structured transaction exports into a reconciled,
