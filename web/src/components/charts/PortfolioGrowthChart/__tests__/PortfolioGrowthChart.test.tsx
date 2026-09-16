@@ -5,11 +5,12 @@
  * a hard visual floor: no blue, green or red fill is ever drawn below the
  * axis, however negative the authoritative net-contribution figure gets.
  */
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { PortfolioGrowthChart } from "../PortfolioGrowthChart";
+import { sliceByPeriod, type Period } from "../../../../features/overview/PortfolioGrowthSection";
 import type { PortfolioGrowthPoint } from "../../../../api/types";
 
 function point(overrides: Partial<PortfolioGrowthPoint>): PortfolioGrowthPoint {
@@ -220,5 +221,69 @@ describe("PortfolioGrowthChart", () => {
 
   it("handles an entirely empty series without crashing", () => {
     expect(() => render(<PortfolioGrowthChart points={[]} width={600} height={300} />)).not.toThrow();
+  });
+
+  // Regression: rapidly switching the period tab (1M..MAX) re-slices the
+  // same underlying series and hands the chart a new `points` prop on every
+  // click, without ever unmounting PortfolioGrowthChart or ChartContainer
+  // (see PortfolioGrowthSection -- no `key={period}` on either). A hovered
+  // point from the previous slice can easily fall outside the new one's
+  // date range, or the new slice can be shorter/longer/empty -- none of
+  // that should throw, leave a stale crosshair, or leave the SVG in a
+  // broken state.
+  describe("period switching", () => {
+    const longSeries: PortfolioGrowthPoint[] = Array.from({ length: 80 }, (_, i) => {
+      const d = new Date(2018, 0, 1 + i * 30);
+      const iso = d.toISOString().slice(0, 10);
+      return point({
+        date: iso,
+        portfolio_value: String(1000 + i * 50),
+        net_contributions: String(800 + i * 40),
+        investment_gain: String(200 + i * 10),
+      });
+    });
+
+    it("survives a rapid 3Y -> 1Y -> MAX -> 1M sequence with no exception, ending on a correctly rendered chart", () => {
+      const sequence: Period[] = ["3Y", "1Y", "MAX", "1M"];
+      const { container, rerender } = render(
+        <PortfolioGrowthChart points={sliceByPeriod(longSeries, "MAX")} width={600} height={300} />,
+      );
+
+      // A point is under hover/keyboard focus going into the first switch,
+      // the case most likely to expose a stale-reference bug across a data
+      // change (sec 6: focused index / hovered point from the prior slice).
+      const overlay = screen.getByLabelText(/left and right arrow keys/);
+      fireEvent.pointerMove(overlay, { clientX: 300, clientY: 100 });
+
+      expect(() => {
+        for (const period of sequence) {
+          rerender(<PortfolioGrowthChart points={sliceByPeriod(longSeries, period)} width={600} height={300} />);
+        }
+      }).not.toThrow();
+
+      // Ends on 1M's own slice, correctly rendered -- the balance line is
+      // still the authoritative last-drawn series, not a leftover from an
+      // earlier period in the sequence.
+      const expectedLast = sliceByPeriod(longSeries, "1M");
+      const balance = container.querySelector('[data-role="portfolio-balance-line"]')!;
+      expect(balance).toBeInTheDocument();
+      expect(container.querySelectorAll('[aria-live="polite"]').length).toBe(1);
+      expect(expectedLast.length).toBeGreaterThan(0);
+    });
+
+    it("does not leave a hovered/focused point referencing data from a prior period after the slice shrinks to empty", () => {
+      const { container, rerender } = render(
+        <PortfolioGrowthChart points={sliceByPeriod(longSeries, "MAX")} width={600} height={300} />,
+      );
+      const overlay = screen.getByLabelText(/left and right arrow keys/);
+      fireEvent.pointerMove(overlay, { clientX: 300, clientY: 100 });
+
+      expect(() => {
+        rerender(<PortfolioGrowthChart points={[]} width={600} height={300} />);
+      }).not.toThrow();
+
+      const live = container.querySelector('[aria-live="polite"]')!.textContent ?? "";
+      expect(live).toBe("");
+    });
   });
 });

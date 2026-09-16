@@ -24,6 +24,16 @@ beforeAll(() => {
     observe() { }
     disconnect() { }
   };
+  // ChartContainer only renders its chart body once it has measured a
+  // nonzero width (see ChartContainer.tsx); jsdom's getBoundingClientRect
+  // always reports 0, which every other test here relies on to keep
+  // PortfolioGrowthChart unmounted. The period-switching regression test
+  // below needs the real chart mounted so it can click through the actual
+  // tab list end-to-end, so it stubs a nonzero width -- unlike the rest of
+  // this suite.
+  Element.prototype.getBoundingClientRect = function () {
+    return { width: 600, height: 340, top: 0, left: 0, right: 600, bottom: 340, x: 0, y: 0, toJSON() {} } as DOMRect;
+  };
 });
 
 function ok<T>(data: T) {
@@ -177,5 +187,32 @@ describe("PortfolioGrowthSection: legend", () => {
     expect(screen.getByText("Investment Gain")).toBeInTheDocument();
     expect(screen.getByText("Investment Loss")).toBeInTheDocument();
     expect(screen.getByText("Contributions")).toBeInTheDocument();
+  });
+});
+
+describe("PortfolioGrowthSection: rapid period switching (regression)", () => {
+  // Regression test for a reported console TypeError ("Cannot read
+  // properties of undefined (reading 'startTime')" inside a minified
+  // `reportAllChanges`) observed while clicking through the period tabs.
+  // That function does not appear anywhere in this app's source, its
+  // dependencies, or its production bundle -- it belongs to external
+  // browser instrumentation, not this component -- but this test still
+  // exercises the real click -> state -> slice -> chart-render path end to
+  // end (via a stubbed nonzero ChartContainer width, see beforeAll above)
+  // to prove the period-tab lifecycle itself never throws.
+  it("clicking 3Y -> 1Y -> MAX -> 1M in quick succession renders the chart at every step without throwing", async () => {
+    setup();
+    renderSection();
+
+    for (const label of ["3Y", "1Y", "MAX", "1M"]) {
+      // eslint-disable-next-line no-await-in-loop -- rapid *sequential* clicks are the point of this test
+      await userEvent.click(screen.getByRole("tab", { name: label }));
+      expect(screen.getByRole("tab", { name: label })).toHaveAttribute("aria-selected", "true");
+    }
+
+    // Landed on 1M with a real, correctly-rendered chart -- not stuck on a
+    // stale render from an earlier period in the sequence.
+    expect(screen.getByRole("tab", { name: "1M" })).toHaveAttribute("aria-selected", "true");
+    expect(document.querySelector('[data-role="portfolio-balance-line"]')).toBeInTheDocument();
   });
 });

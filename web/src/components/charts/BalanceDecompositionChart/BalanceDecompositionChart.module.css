@@ -29,6 +29,12 @@
 
 /* Step 8-established convention: the overlay driving hover + keyboard
    navigation gets a visible focus indicator like any interactive control. */
+/* Some engines (notably WebKit/Safari) apply their own default focus ring
+   to a tabindex'd SVG element on a plain click, not just real keyboard
+   navigation -- :focus-visible alone doesn't suppress it there. Explicitly
+   clearing the non-:focus-visible case keeps the accent ring for keyboard
+   use (sec 8) without a native ring appearing on every mouse/touch press. */
+.interactionLayer:focus:not(:focus-visible) { outline: none; }
 .interactionLayer:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
 
 .srOnly {

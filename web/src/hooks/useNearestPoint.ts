@@ -16,7 +16,17 @@ import * as d3 from "d3";
  * keyboard user each expect the point under them.
  */
 export function useNearestPoint<T>(data: T[], xAccessor: (d: T) => Date, xScale: d3.ScaleTime<number, number>) {
-  const [pointerHovered, setPointerHovered] = useState<T | null>(null);
+  // Both hover states are stored as an INDEX into `data`, never the point
+  // object itself (sec 6 hardening: a period switch re-slices `data` to a
+  // new array on every render -- including down to a shorter range or to
+  // empty -- and a stale point object surviving that re-render would still
+  // get rendered against the *new* xScale/domain, producing NaN SVG
+  // coordinates or a tooltip for a date no longer in range. Indexing into
+  // the current `data` on every read instead means a now-out-of-bounds
+  // index naturally resolves to `undefined` -- no explicit reset/effect
+  // needed, and no correct in-range hover is ever dropped just because an
+  // unrelated re-render produced a new (but equivalent) `data` array).
+  const [pointerIndex, setPointerIndex] = useState<number | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const bisect = useMemo(() => d3.bisector(xAccessor).left, [xAccessor]);
 
@@ -38,15 +48,15 @@ export function useNearestPoint<T>(data: T[], xAccessor: (d: T) => Date, xScale:
       const a = data[index - 1];
       const b = data[index];
       setFocusedIndex(null); // pointer interaction supersedes a prior keyboard focus
-      if (!a) { setPointerHovered(b ?? null); return; }
-      if (!b) { setPointerHovered(a); return; }
-      const nearest = date.getTime() - xAccessor(a).getTime() > xAccessor(b).getTime() - date.getTime() ? b : a;
-      setPointerHovered(nearest);
+      if (!a) { setPointerIndex(b ? index : null); return; }
+      if (!b) { setPointerIndex(index - 1); return; }
+      const nearest = date.getTime() - xAccessor(a).getTime() > xAccessor(b).getTime() - date.getTime() ? index : index - 1;
+      setPointerIndex(nearest);
     },
     [data, xScale, bisect, xAccessor],
   );
 
-  const onPointerLeave = useCallback(() => setPointerHovered(null), []);
+  const onPointerLeave = useCallback(() => setPointerIndex(null), []);
 
   const onFocus = useCallback(() => {
     setFocusedIndex((i) => i ?? (data.length ? 0 : null));
@@ -74,7 +84,7 @@ export function useNearestPoint<T>(data: T[], xAccessor: (d: T) => Date, xScale:
     [data.length],
   );
 
-  const hovered = focusedIndex !== null ? (data[focusedIndex] ?? null) : pointerHovered;
+  const hovered = focusedIndex !== null ? (data[focusedIndex] ?? null) : (pointerIndex !== null ? (data[pointerIndex] ?? null) : null);
 
   return {
     hovered, onPointerMove, onPointerLeave,
