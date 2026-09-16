@@ -10,6 +10,21 @@
 .value[data-sign="positive"] { color: var(--color-positive); }
 .value[data-sign="negative"] { color: var(--color-negative); }
 
+/* Vanyard: this tooltip content renders inside ChartTooltip's own wrapper,
+   whose background switches to var(--color-surface) for Vanyard's flat
+   paper-card look (see ChartTooltip.module.css) -- but .date/.row/.value
+   above are hard-coded to color: var(--color-surface) too, tuned only for
+   the generic Light/Dark inverted chip (var(--color-text) background). In
+   Vanyard that made the text colour equal the tooltip's own new
+   background: invisible text, in both Vanyard Light and Vanyard Dark.
+   Matches the override ChartTooltip.module.css already applies to its own
+   same-named classes. */
+:global([data-theme="vanyard"]) .date { color: var(--color-text); }
+:global([data-theme="vanyard"]) .row { color: var(--color-text); opacity: 1; }
+:global([data-theme="vanyard"]) .value { color: var(--color-text); }
+:global([data-theme="vanyard"]) .value[data-sign="positive"] { color: var(--color-positive); }
+:global([data-theme="vanyard"]) .value[data-sign="negative"] { color: var(--color-negative); }
+
 /* Step 8-established convention: the overlay driving hover + keyboard
    navigation gets a visible focus indicator like any interactive control. */
 .interactionLayer:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }

@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
+import { BREAKPOINT_PHONE } from "../../../design-system/breakpoints";
 import styles from "./ChartContainer.module.css";
 
 export interface ChartDimensions {
@@ -9,6 +10,15 @@ export interface ChartDimensions {
 
 export interface ChartContainerProps {
   height?: number;
+  /** Below `minHeightRatioMaxWidth` (default the phone breakpoint), the
+   * chart is given at least `width * minHeightRatio` of height instead of
+   * the fixed `height` above -- a narrow phone gets a chart tall enough to
+   * actually read, rather than the same absolute height as desktop looking
+   * squat relative to its own (much narrower) width. Above that width,
+   * `height` alone applies, unchanged. Omit for a chart that should just
+   * keep its fixed height at every width. */
+  minHeightRatio?: number;
+  minHeightRatioMaxWidth?: number;
   title?: string;
   /** A short, plain-language summary of what the chart shows -- read by
    * screen readers and always present, so the chart's meaning does not
@@ -23,9 +33,21 @@ export interface ChartContainerProps {
  * children render-prop; this component holds no chart-specific state, so it
  * is the one place every chart gets its responsive sizing from (sec 3: React
  * owns composition/state, D3 owns geometry). */
-export function ChartContainer({ height = 320, title, accessibleSummary, children }: ChartContainerProps) {
+export function ChartContainer({
+  height = 320,
+  minHeightRatio,
+  minHeightRatioMaxWidth = BREAKPOINT_PHONE,
+  title,
+  accessibleSummary,
+  children,
+}: ChartContainerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+
+  const effectiveHeight =
+    minHeightRatio && width > 0 && width <= minHeightRatioMaxWidth
+      ? Math.max(height, Math.round(width * minHeightRatio))
+      : height;
 
   useLayoutEffect(() => {
     const el = ref.current;
@@ -55,8 +77,8 @@ export function ChartContainer({ height = 320, title, accessibleSummary, childre
   return (
     <figure className={styles.figure}>
       {title && <figcaption className={styles.title}>{title}</figcaption>}
-      <div ref={ref} className={styles.canvas} style={{ height }}>
-        {width > 0 && children({ width, height })}
+      <div ref={ref} className={styles.canvas} style={{ height: effectiveHeight }}>
+        {width > 0 && children({ width, height: effectiveHeight })}
       </div>
       <p className={styles.srOnly}>{accessibleSummary}</p>
     </figure>

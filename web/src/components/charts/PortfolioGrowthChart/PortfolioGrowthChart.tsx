@@ -3,6 +3,7 @@ import * as d3 from "d3";
 
 import { formatDate, formatMoney, formatMoneyCompact, formatMoneySigned } from "../../../formatting/money";
 import type { PortfolioGrowthPoint } from "../../../api/types";
+import { BREAKPOINT_NARROW_PHONE, BREAKPOINT_PHONE } from "../../../design-system/breakpoints";
 import { Axis } from "../Axis/Axis";
 import { ChartTooltip } from "../ChartTooltip/ChartTooltip";
 import { Crosshair } from "../Crosshair/Crosshair";
@@ -18,7 +19,25 @@ export interface PortfolioGrowthChartProps {
   height: number;
 }
 
-const MARGIN = { top: 16, right: 16, bottom: 28, left: 72 };
+/** The left margin exists for the Y-axis' own dollar labels ($0/$20K/...);
+ * a fixed 72px is a small slice of a desktop-width chart but a large one of
+ * a phone-width chart, so it -- and the X-axis tick count, which otherwise
+ * overlaps at the same narrow widths -- scale down in two steps rather than
+ * shrinking the tick text itself (formatMoneyCompact's labels stay legible
+ * at every width; what changes is how many of them, and how much margin,
+ * the axis needs). Values/scales/series are untouched -- this only affects
+ * where the plot area's edges fall. */
+function marginFor(width: number) {
+  if (width <= BREAKPOINT_NARROW_PHONE) return { top: 16, right: 8, bottom: 24, left: 44 };
+  if (width <= BREAKPOINT_PHONE) return { top: 16, right: 12, bottom: 26, left: 52 };
+  return { top: 16, right: 16, bottom: 28, left: 72 };
+}
+
+function xTickCountFor(width: number): number {
+  if (width <= BREAKPOINT_NARROW_PHONE) return 3;
+  if (width <= BREAKPOINT_PHONE) return 4;
+  return 6;
+}
 
 interface Parsed {
   date: Date;
@@ -78,6 +97,8 @@ interface Parsed {
  * geometry, explicitly not an edit to any authoritative value.
  */
 export function PortfolioGrowthChart({ points, width, height }: PortfolioGrowthChartProps) {
+  const MARGIN = marginFor(width);
+  const xTickCount = xTickCountFor(width);
   const innerWidth = width - MARGIN.left - MARGIN.right;
   const innerHeight = height - MARGIN.top - MARGIN.bottom;
 
@@ -180,7 +201,7 @@ export function PortfolioGrowthChart({ points, width, height }: PortfolioGrowthC
       <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
         <Axis scale={yScale} orientation="left" tickCount={5} grid gridLength={innerWidth}
               tickFormat={(v) => formatMoneyCompact(String(v))} />
-        <Axis scale={xScale} orientation="bottom" transform={`translate(0,${innerHeight})`} tickCount={6} />
+        <Axis scale={xScale} orientation="bottom" transform={`translate(0,${innerHeight})`} tickCount={xTickCount} />
 
         {/* Investment Gain / Investment Loss -- drawn first so the blue
             Contributions foundation always sits crisply on top of it. */}

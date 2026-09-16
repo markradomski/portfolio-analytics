@@ -2,6 +2,16 @@
 .value { font: var(--text-figure); color: var(--color-surface); }
 .quality { font: var(--text-meta); color: var(--color-surface); opacity: 0.7; margin-top: var(--space-1); }
 
+/* Vanyard: this tooltip content renders inside ChartTooltip's own wrapper,
+   whose background switches to var(--color-surface) for Vanyard's flat
+   paper-card look (see ChartTooltip.module.css) -- but .date/.value/.quality
+   above are hard-coded to color: var(--color-surface) too, tuned only for
+   the generic Light/Dark inverted chip. Matches the override
+   ChartTooltip.module.css already applies to its own same-named classes. */
+:global([data-theme="vanyard"]) .date { color: var(--color-text); }
+:global([data-theme="vanyard"]) .value { color: var(--color-text); }
+:global([data-theme="vanyard"]) .quality { color: var(--color-text); opacity: 0.75; }
+
 /* Step 8 hardening: the overlay rect that drives hover AND keyboard
    navigation (sec 15/16) needs a visible focus indicator like any other
    interactive control -- outline-offset keeps it from being clipped by

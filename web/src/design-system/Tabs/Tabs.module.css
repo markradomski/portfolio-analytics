@@ -54,3 +54,22 @@
 :global([data-theme="vanyard"]) .tab:disabled {
   background: var(--color-surface-secondary, var(--color-background));
 }
+
+/* Phone: a full 1M..MAX period set (8 tabs) needs its per-tab padding/gap
+   trimmed to actually fit a narrow card's content width without relying on
+   the .list overflow-x scroll above -- vertical padding is untouched (the
+   tap target stays a comfortable height), only the horizontal padding/gap
+   that would otherwise force a scroll shrinks. */
+@media (max-width: 480px) {
+  .tab { padding: var(--space-3) var(--space-2); font-size: 0.8125rem; }
+  :global([data-theme="vanyard"]) .list { gap: var(--space-1); }
+  :global([data-theme="vanyard"]) .tab { padding: var(--space-2) var(--space-2); }
+}
+
+/* Narrow phone: tighten further so all 8 still fit without scrolling down
+   to ~320px. */
+@media (max-width: 390px) {
+  .list { gap: 1px; }
+  .tab { padding: var(--space-3) 3px; font-size: 0.6875rem; }
+  :global([data-theme="vanyard"]) .tab { padding: var(--space-2) 3px; }
+}

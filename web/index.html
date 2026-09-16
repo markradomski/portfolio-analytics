@@ -15,19 +15,22 @@
       rel="stylesheet"
     />
     <script>
-      // Apply the saved colour-theme preference before first paint so the
-      // page never flashes the wrong theme. Mirrors applyTheme() in
-      // src/hooks/useTheme.ts -- "system" (or nothing saved) leaves the
-      // attribute off and the prefers-color-scheme media query decides.
-      // "vanyard" is always an explicit choice, never a system default --
-      // there is no prefers-color-scheme: vanyard.
+      // Apply the resolved colour theme before first paint so the page
+      // never flashes the wrong theme. Mirrors applyTheme() in
+      // src/hooks/useTheme.ts: an explicit, validly-stored "light"/"dark"/
+      // "vanyard" wins; anything else (first visit, cleared storage, an
+      // invalid stored value, or localStorage throwing entirely) falls
+      // through to Vanyard Dark, the app's canonical default presentation.
       (function () {
         try {
           var t = localStorage.getItem("theme");
           if (t === "light" || t === "dark" || t === "vanyard") {
             document.documentElement.setAttribute("data-theme", t);
+            return;
           }
         } catch (e) {}
+        document.documentElement.setAttribute("data-theme", "vanyard");
+        document.documentElement.setAttribute("data-vanyard-mode", "dark");
       })();
     </script>
   </head>

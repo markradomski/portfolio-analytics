@@ -6,9 +6,26 @@
 .eventRow[data-sign="positive"] { color: var(--color-positive); }
 .eventRow[data-sign="negative"] { color: var(--color-negative); }
 .row { display: flex; justify-content: space-between; gap: var(--space-4); font: var(--text-meta); color: var(--color-surface); opacity: 0.85; }
+/* See ChartTooltip.module.css's own .row > * for why this is needed --
+   flex items default to min-width:auto, which let a long label like
+   "Cumulative investment gain" overflow the tooltip's maxWidth instead of
+   wrapping when squeezed into a narrow anchor gap near a chart's edge. */
+.row > * { min-width: 0; overflow-wrap: break-word; }
 .value { font: var(--text-meta); font-family: var(--font-mono); color: var(--color-surface); opacity: 1; }
 .value[data-sign="positive"] { color: var(--color-positive); }
 .value[data-sign="negative"] { color: var(--color-negative); }
+
+/* Vanyard: this tooltip content renders inside ChartTooltip's own wrapper,
+   whose background switches to var(--color-surface) for Vanyard's flat
+   paper-card look (see ChartTooltip.module.css) -- but .date/.row/.value
+   above are hard-coded to color: var(--color-surface) too, tuned only for
+   the generic Light/Dark inverted chip. Matches the override
+   ChartTooltip.module.css already applies to its own same-named classes. */
+:global([data-theme="vanyard"]) .date { color: var(--color-text); }
+:global([data-theme="vanyard"]) .row { color: var(--color-text); opacity: 1; }
+:global([data-theme="vanyard"]) .value { color: var(--color-text); }
+:global([data-theme="vanyard"]) .value[data-sign="positive"] { color: var(--color-positive); }
+:global([data-theme="vanyard"]) .value[data-sign="negative"] { color: var(--color-negative); }
 
 /* Step 8-established convention: the overlay driving hover + keyboard
    navigation gets a visible focus indicator like any interactive control. */

@@ -1,4 +1,4 @@
-.wrap { overflow-x: auto; }
+.wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
 .table { width: 100%; border-collapse: collapse; font: var(--text-body); }
 .table th, .table td {
   padding: var(--space-3) var(--space-4);

@@ -1,2 +1,9 @@
 .date { font: var(--text-body-strong); color: var(--color-surface); margin-bottom: 2px; }
 .value { font: var(--text-figure); color: var(--color-surface); }
+
+/* Vanyard: tooltip background switches to var(--color-surface) for
+   Vanyard's flat paper-card look (see ChartTooltip.module.css) -- but
+   .date/.value above are hard-coded to color: var(--color-surface) too,
+   tuned only for the generic Light/Dark inverted chip. */
+:global([data-theme="vanyard"]) .date { color: var(--color-text); }
+:global([data-theme="vanyard"]) .value { color: var(--color-text); }

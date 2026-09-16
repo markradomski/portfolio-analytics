@@ -153,6 +153,7 @@ export function PortfolioGrowthSection({ rateOfReturn, contributed, withdrawn }:
           return (
             <ChartContainer
               height={340}
+              minHeightRatio={1.15}
               accessibleSummary={
                 `Total balance, net contributions and investment gain or loss, ` +
                 `${period === "MAX" ? "full history" : period}, ` +

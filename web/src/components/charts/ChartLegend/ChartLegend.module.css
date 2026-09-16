@@ -28,3 +28,20 @@
   border-radius: 2px;
   flex-shrink: 0;
 }
+
+/* Phone: a deliberate 2x2 grid (Total Balance / Contributions over
+   Investment Gain / Investment Loss -- LEGEND_ITEMS' own order in
+   PortfolioGrowthSection.tsx) rather than leaving flex-wrap to decide how
+   many fit per row, which can end up 1 or 3-per-row depending on exact
+   label widths. All four series stay visible, markers stay aligned to
+   their labels via the grid's own columns. */
+@media (max-width: 480px) {
+  .list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-4);
+    row-gap: var(--space-2);
+  }
+  .item { min-width: 0; }
+  .label { overflow-wrap: break-word; }
+}

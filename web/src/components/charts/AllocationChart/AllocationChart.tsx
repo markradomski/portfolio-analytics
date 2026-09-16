@@ -45,7 +45,24 @@ export function AllocationChart({ segments, width }: AllocationChartProps) {
 
   return (
     <div>
-      <svg width={width} height={28} role="img" aria-label="Portfolio allocation, proportional to market value">
+      {/* `width` stays the coordinate system every bar's x/barWidth is
+          computed in (unchanged); the element itself renders at its
+          container's actual width via viewBox scaling rather than a fixed
+          pixel `width` attribute, which on a phone-width card was wider
+          than the viewport and the single biggest source of page-level
+          horizontal overflow this pass found. Proportions are unaffected --
+          every rect is already a fraction of `width`, so scaling the whole
+          coordinate system uniformly changes nothing about how they relate
+          to each other. */}
+      <svg
+        viewBox={`0 0 ${width} 28`}
+        preserveAspectRatio="none"
+        width="100%"
+        height={28}
+        className={styles.bar}
+        role="img"
+        aria-label="Portfolio allocation, proportional to market value"
+      >
         {withOffsets.map((s) => (
           <rect
             key={s.key}

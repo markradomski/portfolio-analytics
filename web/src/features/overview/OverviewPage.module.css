@@ -28,7 +28,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-6);
+  min-width: 0;
 }
+.headerStats > * { min-width: 0; }
 
 .chartCard {
   padding-bottom: var(--space-4);
@@ -76,4 +78,13 @@
     align-items: flex-start;
     gap: var(--space-4);
   }
+}
+
+/* Phone: trim the vertical rhythm between cards/sections a little -- the
+   desktop gaps read as excessive whitespace at this width. Hierarchy
+   (balance -> return -> selector -> legend -> chart) is unchanged, only the
+   spacing between blocks tightens. */
+@media (max-width: 480px) {
+  .page { gap: var(--space-5); }
+  .grid { gap: var(--space-4); }
 }

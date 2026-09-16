@@ -90,3 +90,10 @@
   :global([data-theme="vanyard"]) .disclaimer { display: none; }
   .main { padding: var(--space-5); min-width: 0; }
 }
+
+/* Phone (breakpoints.ts / tokens.css): tighten the page gutter from
+   --space-5 (24px) to the ~16px this pass targets, and drop .main's
+   desktop max-width so it never fights the viewport at this size. */
+@media (max-width: 480px) {
+  .main { padding: var(--space-4); max-width: 100%; }
+}

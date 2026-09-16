@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 
 import { useThemeContext } from "../../../hooks/ThemeContext";
-import type { ActiveTheme } from "../../../hooks/useTheme";
+import { isVanyardTheme } from "../../../hooks/useTheme";
 import styles from "./ThemeToggle.module.css";
 
 /** Thin-line sun / crescent-moon marks, drawn from the design token
@@ -47,7 +47,7 @@ function ShipIcon() {
   return <span className={`${styles.icon} ${styles.shipIcon}`} aria-hidden="true" />;
 }
 
-const OPTIONS: { theme: ActiveTheme; label: string; Icon: () => ReactElement }[] = [
+const OPTIONS: { theme: "light" | "dark" | "vanyard"; label: string; Icon: () => ReactElement }[] = [
   { theme: "light", label: "Light", Icon: SunIcon },
   { theme: "dark", label: "Dark", Icon: MoonIcon },
   { theme: "vanyard", label: "Vanyard", Icon: ShipIcon },
@@ -57,9 +57,15 @@ const OPTIONS: { theme: ActiveTheme; label: string; Icon: () => ReactElement }[]
  * A three-mark switch for the colour theme, sitting top-right on every page
  * (rendered once by `AppShell`). The mark matching what is currently shown
  * is highlighted; clicking another switches to it. Clicking the mark that
- * is already the explicit Light/Dark choice returns to following the OS
- * (`prefers-color-scheme`) -- "vanyard" has no OS equivalent, so picking it
- * is always a plain explicit selection (see useTheme's `toggleTo`).
+ * is already the explicit Light/Dark choice returns to "system" -- which,
+ * with no OS-following default any more, means Vanyard Dark (see
+ * useTheme's `toggleTo`/`resolvePreference`) -- "vanyard" has no such
+ * equivalent, so picking it is always a plain explicit selection.
+ *
+ * The Vanyard mark's pressed state covers both Vanyard variants
+ * (`isVanyardTheme`): Vanyard Dark has no mark of its own (it's the
+ * default you land on with no explicit choice, not a fourth button), but
+ * the switch should still show *some* mark pressed rather than none.
  */
 export function ThemeToggle() {
   const { preference, resolved, toggleTo } = useThemeContext();
@@ -67,7 +73,7 @@ export function ThemeToggle() {
   return (
     <div className={styles.group} role="group" aria-label="Colour theme">
       {OPTIONS.map(({ theme, label, Icon }) => {
-        const active = resolved === theme;
+        const active = theme === "vanyard" ? isVanyardTheme(resolved) : resolved === theme;
         const isExplicit = preference === theme;
         const title =
           theme === "vanyard"

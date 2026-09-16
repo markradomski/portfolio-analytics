@@ -2,19 +2,20 @@ import { useEffect, type ReactNode } from "react";
 import { NavLink, useSearchParams } from "react-router-dom";
 
 import { VanyardLogo } from "../../brand/VanyardLogo/VanyardLogo";
+import { isVanyardTheme, type ActiveTheme } from "../../../hooks/useTheme";
 import { useThemeContext } from "../../../hooks/ThemeContext";
-import type { ActiveTheme } from "../../../hooks/useTheme";
 import { getStoredPeriod } from "../../../lib/periodStorage";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import styles from "./AppShell.module.css";
 
 // Light and Dark share the app's one brand mark (no separate dark-tuned
-// icon exists); Vanyard's is the cropped ship-tile artwork (see
-// VanyardLogo's own provenance note).
+// icon exists); both Vanyard variants use the cropped ship-tile artwork
+// (see VanyardLogo's own provenance note).
 const FAVICON_BY_THEME: Record<ActiveTheme, { href: string; type: string }> = {
   light: { href: "/favicon.svg", type: "image/svg+xml" },
   dark: { href: "/favicon.svg", type: "image/svg+xml" },
   vanyard: { href: "/vanyard-favicon.png", type: "image/png" },
+  "vanyard-dark": { href: "/vanyard-favicon.png", type: "image/png" },
 };
 
 const NAV_ITEMS = [
@@ -45,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   // Sec 23: an optional, cleanly-scoped browser-title swap -- restores the
   // normal title on unmount/theme change rather than leaving it stuck.
   useEffect(() => {
-    document.title = resolved === "vanyard" ? "Vanyard | Portfolio Analytics" : "Portfolio Analytics";
+    document.title = isVanyardTheme(resolved) ? "Vanyard | Portfolio Analytics" : "Portfolio Analytics";
   }, [resolved]);
 
   // Same idea for the tab icon, explicit per scheme rather than a single
@@ -70,7 +71,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             swap, not a second header component -- everything else about
             this nav (links, destinations, active-state mechanism,
             responsive collapse) is exactly what Light/Dark already use. */}
-        {resolved === "vanyard" ? (
+        {isVanyardTheme(resolved) ? (
           <VanyardLogo withWordmark size="small" className={styles.vanyardBrand} />
         ) : (
           <p className={styles.brand}>Portfolio</p>

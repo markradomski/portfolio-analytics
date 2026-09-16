@@ -13,6 +13,12 @@
 .date { font: var(--text-body-strong); color: var(--color-surface); margin-bottom: var(--space-1); }
 .value { font: var(--text-figure); color: var(--color-surface); }
 .row { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: 2px; }
+/* Flex items default to min-width:auto (floored at their own content's
+   min-content size), which is what let a row's combined label+value
+   overflow the tooltip's own maxWidth (ChartTooltip.tsx) rather than
+   shrinking or wrapping when the tooltip is squeezed into a narrow anchor
+   gap near a chart's edge. min-width:0 lets the label wrap instead. */
+.row > * { min-width: 0; overflow-wrap: break-word; }
 .faint { opacity: 0.75; }
 
 /* Vanyard (sec 21): a light paper tooltip with a hairline border, not the

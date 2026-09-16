@@ -3,9 +3,19 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-medium);
   padding: var(--space-5);
+  width: 100%;
+  min-width: 0;
 }
 .flat { box-shadow: none; }
 .raised { box-shadow: var(--shadow-low); }
+
+/* Phone: --space-5 (24px) of padding on every side of every card eats
+   noticeably into content width at this size (chart width especially) --
+   tighten to --space-4 (16px), within the 16-20px this pass targets.
+   Desktop/tablet padding is untouched. */
+@media (max-width: 480px) {
+  .card { padding: var(--space-4); }
+}
 
 .header {
   display: flex;

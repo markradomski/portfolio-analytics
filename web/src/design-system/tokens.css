@@ -6,7 +6,31 @@
  *
  * Visual direction: precise, editorial, analytical -- not a fintech
  * dashboard template. Numbers carry the visual authority; chrome stays quiet.
+ *
+ * Responsive breakpoints (mobile-pass): there is no single generated scale,
+ * but every `@media (max-width: ...)` in the app is drawn from this same
+ * three-step ladder --
+ *
+ *   768px -- tablet / mobile (layout switches: nav collapses, grids stack)
+ *   480px -- phone (page gutters, card padding, chart margins tighten)
+ *   390px -- narrow phone (period tabs, chart legend, axis ticks tighten further)
+ *
+ * CSS can't share a numeric custom property into a media-query condition,
+ * so these are documented here rather than defined as `--breakpoint-*`
+ * tokens; `src/design-system/breakpoints.ts` holds the same three numbers
+ * for the handful of places (ChartContainer, PortfolioGrowthChart) that
+ * need them in JS.
  */
+
+*, *::before, *::after {
+  /* No global reset previously existed -- content-box's default meant a
+     `width: 100%` child plus its own padding could exceed its parent's box
+     exactly at the narrow widths this pass targets. box-sizing:border-box
+     is the standard, low-risk fix: padding/border are included in the
+     stated width instead of added to it, with no visible effect at any
+     width wide enough that this never mattered. */
+  box-sizing: border-box;
+}
 
 :root {
   /* -- colour: semantic tokens, never a raw hex in a component ------------ */
@@ -241,6 +265,70 @@
   --chart-series-6: #5b7c99;
   --chart-grid: #e8e4de;
   --chart-axis: #8a847d;
+}
+
+/**
+ * Vanyard Dark -- the application's default presentation (see useTheme's
+ * `resolvePreference`: no explicit choice resolves here, not to Light/Dark
+ * or the OS). Same `data-theme="vanyard"` attribute as Vanyard Light, plus
+ * `data-vanyard-mode="dark"`, so every existing `[data-theme="vanyard"]`
+ * rule elsewhere (nav, tabs, table, tooltip, disclaimer, ...) keeps
+ * applying unchanged -- only the colour tokens themselves differ here.
+ *
+ * Derived the same way Dark already derives from Light in this file: same
+ * hue identity, luminance inverted for a dark surface, positive/negative/
+ * warning and chart hues lifted for AA contrast on a dark background.
+ * Burgundy brightens to a warm rose so it still reads as "Vanyard" rather
+ * than becoming a generic dark-mode blue.
+ */
+:root[data-theme="vanyard"][data-vanyard-mode="dark"] {
+  --color-background: #1a1512;
+  --color-surface: #211b17;
+  --color-surface-raised: #2a231d;
+  --color-surface-secondary: #241e19;
+  --color-border: #3a3129;
+  --color-border-strong: #4a3f34;
+
+  --color-text: #f2ece4;
+  --color-text-muted: #a89a8a;
+  --color-text-faint: #7d7164;
+
+  --color-positive: #52c98a;
+  --color-positive-bg: #16251d;
+  --color-negative: #e2726f;
+  --color-negative-bg: #2a1817;
+  --color-warning: #e0954c;
+  --color-warning-bg: #2b2013;
+
+  --color-accent: #d1667c; /* Vanyard Rose: burgundy lifted for a dark surface */
+  --color-accent-bg: #2c161b;
+  --color-accent-strong: #e79aa8; /* hover/pressed lightens further on dark */
+
+  --color-balance: #d1667c;
+  --color-contribution: #5b9bd9;
+
+  --color-quality-actual: #52c98a;
+  --color-quality-calculated: #5b9bd9;
+  --color-quality-estimated: #8a8074;
+  --color-quality-limited: #e0954c;
+  --color-quality-unavailable: #4a3f34;
+  --color-unknown: #8a8074;
+
+  --radius-small: 4px;
+  --radius-medium: 6px;
+  --radius-large: 10px;
+
+  --shadow-low: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.45);
+
+  --chart-series-1: #5b9bd9;
+  --chart-series-2: #e0954c;
+  --chart-series-3: #52c98a;
+  --chart-series-4: #d1667c;
+  --chart-series-5: #a89a8a;
+  --chart-series-6: #8fb3c9;
+  --chart-grid: #2e2620;
+  --chart-axis: #7d7164;
 }
 
 body {
