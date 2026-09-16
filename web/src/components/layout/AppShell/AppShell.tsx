@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { useEffect, useState, type ReactNode } from "react";
+import { NavLink, useLocation, useSearchParams } from "react-router-dom";
 
 import { VanyardLogo } from "../../brand/VanyardLogo/VanyardLogo";
 import { isVanyardTheme, type ActiveTheme } from "../../../hooks/useTheme";
@@ -36,12 +36,39 @@ const NAV_ITEMS = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { resolved } = useThemeContext();
+  const [menuOpen, setMenuOpen] = useState(false);
   // Falls back to the persisted value when the current screen's URL has no
   // "period" param at all (e.g. browsing Holdings, which doesn't carry
   // one) -- so the Overview/Performance nav links don't lose the selection
   // just because the current page happens not to echo it.
   const period = searchParams.get("period") ?? getStoredPeriod();
+
+  // The mobile nav overlay must not survive a route change (selecting a
+  // destination, or any other navigation) -- close it whenever the path
+  // changes rather than relying on each NavLink's own onClick to catch
+  // every way the route can change.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  // Escape closes the overlay; body scroll is locked while it's open and
+  // restored the moment it isn't (covers both the close button and this
+  // effect's own cleanup on unmount).
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
 
   // Sec 23: an optional, cleanly-scoped browser-title swap -- restores the
   // normal title on unmount/theme change rather than leaving it stuck.
@@ -62,31 +89,74 @@ export function AppShell({ children }: { children: ReactNode }) {
     link.href = favicon.href;
   }, [resolved]);
 
+  // The Vanyard identity (sec 2/13 of the theme spec) is a brand swap, not
+  // a second header component -- everything else about the nav (links,
+  // destinations, active-state mechanism) is exactly what Light/Dark
+  // already use. One element, reused wherever the brand mark appears
+  // (desktop sidebar, mobile header) rather than redeclared per site.
+  const brand = isVanyardTheme(resolved) ? (
+    <VanyardLogo withWordmark size="small" className={styles.vanyardBrand} />
+  ) : (
+    <p className={styles.brand}>Portfolio</p>
+  );
+
+  // NAV_ITEMS is declared once above; this renders it into whichever
+  // presentation (desktop sidebar vs. mobile overlay) needs it, so the two
+  // never risk drifting into different route lists. `onNavigate` lets the
+  // mobile overlay close itself on selection without the desktop sidebar
+  // needing to know that concept exists.
+  function navLinks(onNavigate?: () => void) {
+    return NAV_ITEMS.map((item) => (
+      <NavLink
+        key={item.to}
+        to={item.periodAware && period ? `${item.to}?period=${period}` : item.to}
+        end={item.end}
+        className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ""}`}
+        onClick={onNavigate}
+      >
+        <span className={styles.linkLabel}>{item.label}</span>
+      </NavLink>
+    ));
+  }
+
   return (
     <div className={styles.shell}>
       <a href="#main" className={styles.skipLink}>Skip to content</a>
       <ThemeToggle />
+
+      {/* <=860px only (AppShell.module.css): the sidebar's nav/brand are
+          hidden entirely at this width, replaced by this compact header
+          (brand + hamburger) and the overlay it opens below. */}
+      <div className={styles.mobileHeader}>
+        {brand}
+        <button
+          type="button"
+          className={styles.hamburger}
+          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={menuOpen}
+          aria-controls="primary-nav-mobile"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span className={styles.hamburgerBar} aria-hidden="true" />
+          <span className={styles.hamburgerBar} aria-hidden="true" />
+          <span className={styles.hamburgerBar} aria-hidden="true" />
+        </button>
+      </div>
+
       <nav className={styles.nav} aria-label="Primary">
-        {/* The Vanyard identity (sec 2/13 of the theme spec) is a brand
-            swap, not a second header component -- everything else about
-            this nav (links, destinations, active-state mechanism,
-            responsive collapse) is exactly what Light/Dark already use. */}
-        {isVanyardTheme(resolved) ? (
-          <VanyardLogo withWordmark size="small" className={styles.vanyardBrand} />
-        ) : (
-          <p className={styles.brand}>Portfolio</p>
-        )}
-        {NAV_ITEMS.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.periodAware && period ? `${item.to}?period=${period}` : item.to}
-            end={item.end}
-            className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ""}`}
-          >
-            {item.label}
-          </NavLink>
-        ))}
+        {brand}
+        {navLinks()}
       </nav>
+
+      {menuOpen && (
+        <>
+          <div className={styles.backdrop} onClick={() => setMenuOpen(false)} aria-hidden="true" />
+          <nav id="primary-nav-mobile" className={styles.mobileNav} aria-label="Primary">
+            {navLinks(() => setMenuOpen(false))}
+          </nav>
+        </>
+      )}
+
       <main id="main" className={styles.main} tabIndex={-1}>
         {children}
       </main>

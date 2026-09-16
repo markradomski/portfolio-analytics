@@ -1,4 +1,8 @@
-.shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+/* --mobile-header-height lives here, not on .mobileHeader itself, so its
+   siblings (.backdrop/.mobileNav below) -- which need the same value for
+   their own top offset -- can read it too; a custom property set on one
+   element isn't visible to its siblings, only to its descendants. */
+.shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; --mobile-header-height: 56px; }
 .nav {
   border-right: 1px solid var(--color-border);
   padding: var(--space-5) var(--space-4);
@@ -18,8 +22,27 @@
 }
 .link:hover { background: var(--color-border); color: var(--color-text); }
 .link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
-.linkActive { background: var(--color-text); color: var(--color-surface); }
-.linkActive:hover { background: var(--color-text); color: var(--color-surface); }
+/* Restrained active treatment: no background block, no left stripe -- just
+   the active foreground colour plus a thin underline sized to the label's
+   own text (via .linkLabel below), not the full stretched link width. One
+   rule for every theme: --color-accent is already Vanyard's burgundy and
+   Light/Dark's own accent hue, so this needs no per-theme override. */
+.linkActive { background: transparent; color: var(--color-accent); }
+.linkActive:hover { background: var(--color-border); color: var(--color-accent); }
+/* .link is a flex item in a stretched column (.nav), so it -- and its
+   hover/click area -- spans the sidebar's full width; wrapping the label in
+   its own inline-block lets the underline hug just the text instead. */
+.linkLabel { position: relative; display: inline-block; }
+.linkActive .linkLabel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--color-accent);
+}
 
 /* Vanyard (sec 13): the existing sidebar stays the existing sidebar --
    only the nav's own surface/active-state colours and the brand mark
@@ -31,12 +54,9 @@
   background: var(--color-surface-secondary, var(--color-background));
 }
 :global([data-theme="vanyard"]) .link:hover { background: var(--color-accent-bg); color: var(--color-accent-strong, var(--color-accent)); }
-:global([data-theme="vanyard"]) .linkActive {
-  background: var(--color-accent-bg);
-  color: var(--color-accent);
-  box-shadow: inset 2px 0 0 var(--color-accent);
-}
-:global([data-theme="vanyard"]) .linkActive:hover { background: var(--color-accent-bg); color: var(--color-accent); }
+/* No Vanyard-specific .linkActive override any more: the base rule above
+   already reads --color-accent, which Vanyard's own tokens.css block
+   already resolves to burgundy -- one implementation, every theme. */
 
 /* Fixed-positioned and a sibling of `.nav` in the markup (AppShell.tsx) --
    deliberately outside both the sidebar's column flow and the mobile
@@ -58,29 +78,122 @@
 :global([data-theme="vanyard"]) .disclaimer { display: block; }
 
 /* Extra right padding keeps page content clear of the fixed ThemeToggle
-   in the top-right corner. */
-.main { padding: var(--space-6) var(--space-8) var(--space-6) var(--space-7); max-width: 1200px; }
+   in the top-right corner. min-width:0 for the same reason .nav's own
+   mobile-row rule below already documents: a grid item's default
+   min-width:auto sizes it to its content's min-content width regardless of
+   its track, so between ~861px (this file's own new nav breakpoint) and
+   ~1420px (220px sidebar + this .main's own 1200px max-width), page
+   content that wants more than the 1fr track's available space was
+   stretching the whole grid -- and the page -- wider than the viewport. */
+.main { padding: var(--space-6) var(--space-8) var(--space-6) var(--space-7); max-width: 1200px; min-width: 0; }
 .skipLink {
   position: absolute; left: -9999px; top: 0; z-index: 100;
   background: var(--color-text); color: var(--color-surface); padding: var(--space-3);
 }
 .skipLink:focus { left: var(--space-3); top: var(--space-3); }
 
-@media (max-width: 900px) {
+/* Mobile header / hamburger / overlay nav -- all hidden above 860px (only
+   the desktop sidebar above is shown there); see the 860px media query for
+   what each becomes at and below it. One header height, shared by the
+   header itself and the overlay's top offset below, so they always line
+   up without hardcoding the same pixel value twice. */
+.mobileHeader {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--mobile-header-height);
+  /* Reserve room for the fixed ThemeToggle in the same top-right corner
+     (same value the old horizontal nav strip already used for this). */
+  padding: 0 116px 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 45; /* above page content and the overlay below; under ThemeToggle's 50 */
+}
+:global([data-theme="vanyard"]) .mobileHeader {
+  background: var(--color-surface-secondary, var(--color-background));
+}
+
+.hamburger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.hamburger:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.hamburgerBar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--color-text);
+  transition: transform var(--motion-transition), opacity var(--motion-transition);
+}
+.hamburger[aria-expanded="true"] .hamburgerBar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger[aria-expanded="true"] .hamburgerBar:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] .hamburgerBar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+@media (prefers-reduced-motion: reduce) {
+  .hamburgerBar { transition: none; }
+}
+
+/* Backdrop and panel are siblings (AppShell.tsx), not parent/child: a click
+   lands on whichever one is topmost at that point, so the panel's own
+   content needs no click-guard to keep "click outside closes" from also
+   closing on clicks inside it. Both fixed (out of flow -- opening never
+   pushes the page or resizes anything under it), and both below
+   ThemeToggle's z-index so the theme switch stays usable while open. */
+.backdrop {
+  display: none;
+  position: fixed;
+  top: var(--mobile-header-height, 56px);
+  left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 40;
+}
+.mobileNav {
+  display: none;
+  position: fixed;
+  top: var(--mobile-header-height, 56px);
+  left: 0; right: 0;
+  z-index: 41;
+  max-height: calc(100vh - var(--mobile-header-height, 56px));
+  overflow-y: auto;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-medium);
+  padding: var(--space-4) var(--space-5);
+  flex-direction: column;
+  gap: var(--space-2);
+  animation: navIn var(--motion-transition, 180ms) ease-out;
+}
+:global([data-theme="vanyard"]) .mobileNav {
+  background: var(--color-surface-secondary, var(--color-background));
+}
+@keyframes navIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobileNav { animation: none; }
+}
+
+@media (max-width: 860px) {
   .shell { grid-template-columns: minmax(0, 1fr); }
-  .nav {
-    border-right: none; border-bottom: 1px solid var(--color-border); flex-direction: row;
-    overflow-x: auto; padding: var(--space-3);
-    /* A grid item's default min-width:auto sizes it to fit its content's
-       full width regardless of overflow-x, so the nav's un-scrolled 8-link
-       width was stretching the whole grid track (and the page) wider than
-       the viewport instead of actually scrolling within its own box. */
-    min-width: 0;
-  }
-  /* Room for the fixed ThemeToggle (now three marks) in the top-right on
-     mobile, so the last nav link scrolls clear of it. */
-  .nav { padding-right: 116px; scroll-padding-right: 116px; }
-  .brand, .vanyardBrand, .disclaimer { display: none; }
+  /* .nav is display:none entirely now (replaced by .mobileHeader below),
+     which already takes its .brand/.vanyardBrand child down with it -- a
+     separate `.brand, .vanyardBrand { display: none }` here would also
+     match .mobileHeader's own copy of the same logo (same shared class),
+     hiding it too. Only .disclaimer (a sibling of .nav, not its child)
+     still needs its own rule. */
+  .nav, .disclaimer { display: none; }
   /* Same specificity as the vanyard-scoped display:block rule above (both
      one class + one attribute selector) so this actually wins by source
      order -- a plain ".disclaimer { display: none }" here was silently
@@ -88,6 +201,17 @@
      disclaimer kept showing (and, while it lived inside .nav, breaking
      the mobile nav strip) at narrow widths. */
   :global([data-theme="vanyard"]) .disclaimer { display: none; }
+  .mobileHeader { display: flex; }
+  /* .backdrop/.mobileNav are only ever mounted (AppShell.tsx) while the
+     menu is open, so their presence in the DOM already means "open" --
+     these just give them their real (out-of-flow) display once mounted,
+     overriding the display:none above that only matters above 860px. */
+  .backdrop { display: block; }
+  .mobileNav { display: flex; }
+  /* Bigger touch targets in the overlay list than the (denser, pointer-
+     oriented) desktop sidebar uses -- same .link/.linkActive/.linkLabel
+     classes, just roomier here. */
+  .mobileNav .link { padding: var(--space-3) var(--space-4); }
   .main { padding: var(--space-5); min-width: 0; }
 }
 
