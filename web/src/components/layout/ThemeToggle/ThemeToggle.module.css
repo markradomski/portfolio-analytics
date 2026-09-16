@@ -73,13 +73,22 @@
   white-space: nowrap;
 }
 
-/* On narrow screens the primary nav becomes a horizontal strip along the
-   top; nudge the switch down so it never overlaps the nav links, and the
-   nav gets matching right padding (AppShell.module.css) so its last link
-   stays reachable. */
-@media (max-width: 900px) {
-  .group {
-    top: var(--space-2);
-    right: var(--space-2);
+/* .inline (AppShell's mobile nav overlay): normal document flow instead of
+   the fixed top-right placement above -- position/offset/stacking are all
+   meaningless here since the overlay itself is what's positioned. */
+.inline {
+  position: static;
+  top: auto;
+  right: auto;
+  z-index: auto;
+}
+
+/* <=860px (AppShell.module.css's own nav breakpoint): the fixed switch
+   moves into the mobile nav overlay instead of floating over a navbar with
+   no room to spare for it -- .inline (rendered inside that overlay) is
+   deliberately excluded, so it stays visible regardless of this rule. */
+@media (max-width: 860px) {
+  .group:not(.inline) {
+    display: none;
   }
 }

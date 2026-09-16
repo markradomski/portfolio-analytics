@@ -10,8 +10,16 @@
   flex-direction: column;
   gap: var(--space-1);
 }
-.brand { font: var(--text-h2); font-family: var(--font-display); margin: 0 0 var(--space-6); color: var(--color-text); }
-.vanyardBrand { margin: 0 0 var(--space-6); }
+.brand { font: var(--text-h2); font-family: var(--font-display); margin: 0; color: var(--color-text); }
+/* This margin is only wanted in the desktop sidebar (.nav), where it
+   separates the brand mark from the links stacked below it -- the same
+   `brand` element (AppShell.tsx) is reused unchanged inside .mobileLogo at
+   <=860px, where it's centred in a compact header with no links beneath
+   it, and this bottom margin has no reason to apply there. */
+@media (min-width: 861px) {
+  .brand { margin: 0 0 var(--space-6); }
+  .vanyardBrand { margin: 0 0 var(--space-6); }
+}
 .link {
   font: var(--text-body-strong);
   color: var(--color-text-muted);
@@ -100,19 +108,33 @@
 .mobileHeader {
   display: none;
   align-items: center;
-  justify-content: space-between;
   height: var(--mobile-header-height);
-  /* Reserve room for the fixed ThemeToggle in the same top-right corner
-     (same value the old horizontal nav strip already used for this). */
-  padding: 0 116px 0 var(--space-4);
+  /* Same horizontal padding the rest of the navbar chrome uses -- nothing
+     reserved on the right any more (the ThemeToggle that used to float
+     over this corner now lives in the overlay instead, see .mobileNav). */
+  padding: 0 var(--space-4);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
+  /* The positioning context .mobileLogo centres itself against below --
+     already established by `position: sticky`, no separate `relative`
+     needed. */
   position: sticky;
   top: 0;
   z-index: 45; /* above page content and the overlay below; under ThemeToggle's 50 */
 }
 :global([data-theme="vanyard"]) .mobileHeader {
   background: var(--color-surface-secondary, var(--color-background));
+}
+
+/* Centred on the navbar itself (left: 50% of .mobileHeader's full width),
+   not on the flex space left over after the hamburger -- so it stays dead
+   centre regardless of the hamburger's own width. The logo (VanyardLogo,
+   unmodified) is simply wrapped, not altered. */
+.mobileLogo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .hamburger {
@@ -176,6 +198,14 @@
 }
 :global([data-theme="vanyard"]) .mobileNav {
   background: var(--color-surface-secondary, var(--color-background));
+}
+/* The same ThemeToggle the fixed corner control used (rendered `inline` --
+   ThemeToggle.module.css), reused rather than a second implementation.
+   Separated from the destinations above it, near the bottom of the list. */
+.mobileNavThemeToggle {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
 }
 @keyframes navIn {
   from { opacity: 0; transform: translateY(-6px); }

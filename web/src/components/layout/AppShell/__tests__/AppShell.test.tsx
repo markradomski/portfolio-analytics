@@ -100,12 +100,18 @@ describe("AppShell: mobile menu", () => {
     expect(document.getElementById("primary-nav-mobile")).toBeInTheDocument();
   });
 
-  it("locks body scroll while open and restores it on close", () => {
+  it("locks scroll on both <html> and <body> while open and restores both on close", () => {
+    // Both, not just <body>: which one is the page's actual scrolling box
+    // depends on <html>'s own overflow (tokens.css sets one explicitly, for
+    // scrollbar-gutter to take effect), so only locking <body> is not
+    // reliably enough on its own.
     renderAt("/");
     fireEvent.click(hamburger());
     expect(document.body.style.overflow).toBe("hidden");
+    expect(document.documentElement.style.overflow).toBe("hidden");
     fireEvent.click(hamburger());
     expect(document.body.style.overflow).toBe("");
+    expect(document.documentElement.style.overflow).toBe("");
   });
 
   it("closes on a second click of the same (now close) button", () => {
@@ -159,6 +165,15 @@ describe("AppShell: theme controls still work alongside the nav changes", () => 
   it("the three-mark theme switch is present and switches theme", async () => {
     renderAt("/");
     await userEvent.click(screen.getByRole("button", { name: /dark theme/i }));
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+  });
+
+  it("is also reachable inside the mobile overlay (moved off the collapsed navbar) and still switches theme", () => {
+    renderAt("/");
+    fireEvent.click(hamburger());
+    const overlay = document.getElementById("primary-nav-mobile")!;
+    const overlayDark = within(overlay).getByRole("button", { name: /dark theme/i, hidden: true });
+    fireEvent.click(overlayDark);
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });
 });

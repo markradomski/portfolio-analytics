@@ -331,6 +331,23 @@
   --chart-axis: #7d7164;
 }
 
+/* Reserves the scrollbar track unconditionally, whether or not a
+   scrollbar is actually needed right now. Without this, opening the
+   mobile nav overlay (AppShell) sets body { overflow: hidden } to lock
+   background scrolling -- which also removes the scrollbar, growing the
+   viewport's layout width by its track's own width, and shifting where
+   any percentage-centred element (the mobile header's centred Vanyard
+   logo included) actually lands on screen between the closed and open
+   states. Reserving the gutter always means that width never changes. */
+html {
+  /* scrollbar-gutter only has an effect on a box whose own overflow is
+     non-visible -- html's initial value is visible, so overflow-y is set
+     explicitly here too (same scrolling behaviour as the default, just
+     named) purely so the gutter reservation actually applies. */
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-text);

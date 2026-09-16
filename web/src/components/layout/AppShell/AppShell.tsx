@@ -55,18 +55,26 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   // Escape closes the overlay; body scroll is locked while it's open and
   // restored the moment it isn't (covers both the close button and this
-  // effect's own cleanup on unmount).
+  // effect's own cleanup on unmount). Locks both <html> and <body>: which
+  // one is actually the page's scrolling box is a propagation rule (only
+  // <body> if <html> itself computes to overflow: visible -- no longer
+  // true once tokens.css gives <html> its own overflow-y so
+  // scrollbar-gutter can apply), so setting only one is not reliably
+  // enough to stop scrolling in every case.
   useEffect(() => {
     if (!menuOpen) return;
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") setMenuOpen(false);
     }
     document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.body.style.overflow = previousBodyOverflow;
     };
   }, [menuOpen]);
 
@@ -124,11 +132,14 @@ export function AppShell({ children }: { children: ReactNode }) {
       <a href="#main" className={styles.skipLink}>Skip to content</a>
       <ThemeToggle />
 
-      {/* <=860px only (AppShell.module.css): the sidebar's nav/brand are
-          hidden entirely at this width, replaced by this compact header
-          (brand + hamburger) and the overlay it opens below. */}
+      {/* <=860px only (AppShell.module.css): the sidebar's nav/brand and
+          the fixed ThemeToggle are hidden entirely at this width, replaced
+          by this compact header -- hamburger far left, the same logo
+          exactly centred on the navbar (not just the flex space left over
+          after the hamburger) -- and the overlay it opens below, which
+          carries the nav links and the theme switch that no longer fit
+          the collapsed header itself. */}
       <div className={styles.mobileHeader}>
-        {brand}
         <button
           type="button"
           className={styles.hamburger}
@@ -141,6 +152,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span className={styles.hamburgerBar} aria-hidden="true" />
           <span className={styles.hamburgerBar} aria-hidden="true" />
         </button>
+        <span className={styles.mobileLogo}>{brand}</span>
       </div>
 
       <nav className={styles.nav} aria-label="Primary">
@@ -153,6 +165,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className={styles.backdrop} onClick={() => setMenuOpen(false)} aria-hidden="true" />
           <nav id="primary-nav-mobile" className={styles.mobileNav} aria-label="Primary">
             {navLinks(() => setMenuOpen(false))}
+            <div className={styles.mobileNavThemeToggle}>
+              <ThemeToggle inline />
+            </div>
           </nav>
         </>
       )}

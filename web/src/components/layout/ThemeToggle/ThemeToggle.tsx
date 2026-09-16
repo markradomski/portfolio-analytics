@@ -53,25 +53,41 @@ const OPTIONS: { theme: "light" | "dark" | "vanyard"; label: string; Icon: () =>
   { theme: "vanyard", label: "Vanyard", Icon: ShipIcon },
 ];
 
+export interface ThemeToggleProps {
+  /** Default (false): the fixed top-right switch shown on every page at
+   * desktop width. true: the same switch, laid out in normal document flow
+   * instead -- for embedding inside the mobile nav overlay (AppShell),
+   * which is where <=860px moves it to rather than floating it over a
+   * navbar that no longer has room to spare for it. Same component, same
+   * logic, only the positioning differs (ThemeToggle.module.css). */
+  inline?: boolean;
+}
+
 /**
- * A three-mark switch for the colour theme, sitting top-right on every page
- * (rendered once by `AppShell`). The mark matching what is currently shown
- * is highlighted; clicking another switches to it. Clicking the mark that
- * is already the explicit Light/Dark choice returns to "system" -- which,
- * with no OS-following default any more, means Vanyard Dark (see
- * useTheme's `toggleTo`/`resolvePreference`) -- "vanyard" has no such
- * equivalent, so picking it is always a plain explicit selection.
+ * A three-mark switch for the colour theme: fixed top-right on every page
+ * at desktop width, or inline inside the mobile nav overlay at <=860px
+ * (`inline`) -- rendered by `AppShell` either way. The mark matching what
+ * is currently shown is highlighted; clicking another switches to it.
+ * Clicking the mark that is already the explicit Light/Dark choice returns
+ * to "system" -- which, with no OS-following default any more, means
+ * Vanyard Dark (see useTheme's `toggleTo`/`resolvePreference`) -- "vanyard"
+ * has no such equivalent, so picking it is always a plain explicit
+ * selection.
  *
  * The Vanyard mark's pressed state covers both Vanyard variants
  * (`isVanyardTheme`): Vanyard Dark has no mark of its own (it's the
  * default you land on with no explicit choice, not a fourth button), but
  * the switch should still show *some* mark pressed rather than none.
  */
-export function ThemeToggle() {
+export function ThemeToggle({ inline = false }: ThemeToggleProps = {}) {
   const { preference, resolved, toggleTo } = useThemeContext();
 
   return (
-    <div className={styles.group} role="group" aria-label="Colour theme">
+    <div
+      className={`${styles.group} ${inline ? styles.inline : ""}`}
+      role="group"
+      aria-label="Colour theme"
+    >
       {OPTIONS.map(({ theme, label, Icon }) => {
         const active = theme === "vanyard" ? isVanyardTheme(resolved) : resolved === theme;
         const isExplicit = preference === theme;
